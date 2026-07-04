@@ -8,6 +8,72 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap');
 
+        /* Contenedor adaptativo de etiquetas de boletos */
+        .selected-badges-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px auto;
+            max-height: 180px; /* Evita que crezca infinitamente si se eligen muchos boletos */
+            overflow-y: auto;
+            padding: 8px;
+            width: 100%;
+        }
+
+        /* Cada etiqueta de boleto individual (Tag) */
+        .ticket-badge {
+            background-color: #0c0c0f;
+            border: 1.5px solid var(--color-amarillo);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Montserrat', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+            user-select: none;
+        }
+
+        .ticket-badge:hover {
+            border-color: var(--color-rojo);
+            transform: translateY(-1px);
+        }
+
+        /* Botón de eliminación integrado (X) */
+        .ticket-badge-remove {
+            background: none;
+            border: none;
+            color: var(--color-texto-mutado);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0 2px;
+            line-height: 1;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ticket-badge-remove:hover {
+            color: var(--color-rojo);
+        }
+
+        /* Línea dinámica de Resumen (Boleto x Precio) */
+        .summary-text-line {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--color-amarillo);
+            text-transform: uppercase;
+            margin-top: 15px;
+            letter-spacing: 0.8px;
+            text-shadow: 1px 1px 0px #000;
+        }
+
         :root {
             --color-fondo: #050508;         
             --color-fondo-card: #0e0e12;    
@@ -922,7 +988,7 @@
         .ganador-info { padding: 20px; }
         .ganador-nombre { font-size: 1.1rem; font-weight: 900; color: #ffffff; margin-bottom: 8px; text-transform: uppercase; }
         .ganador-premio { color: var(--color-amarillo); font-weight: 700; font-size: 0.9rem; }
-        .ganador-boleto { font-size: 0.85rem; color: var(--color-texto-mutado); margin-top: 8px; }
+        .ganador-boleto { font-size: 0.85rem; color: var(--color-texto-mutated); margin-top: 8px; }
 
         /* --- PREGUNTAS FRECUENTES --- */
         .faq-section { background-color: var(--color-fondo-card); border-radius: 16px; padding: 60px 40px; border: 2px solid var(--color-borde); box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 60px;}
@@ -1182,15 +1248,9 @@
                 | <button onclick="limpiarSeleccion()" style="background:none; border:none; color:var(--color-rojo); font-weight:bold; cursor:pointer; text-decoration:underline;">🧹 Vaciar Carrito</button>
             </p>
 
-            <div class="legend-row">
-                <div class="legend-item"><div class="color-box box-available"></div><span>Disponible</span></div>
-                <div class="legend-item"><div class="color-box box-selected">🍀</div><span>Seleccionado</span></div>
-                <div class="legend-item"><div class="color-box box-sold"></div><span>Reservado/Vendido</span></div>
-            </div>
-
+            <!-- CONTENEDOR DINÁMICO DE BOLETOS SELECCIONADOS (CORREGIDO DUPLICADO) -->
             <div id="selectionSummaryBlock" style="background-color: #0c0c0f; border: 2px solid var(--color-borde); border-radius: 12px; padding: 25px; margin-bottom: 35px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-                <p style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Boletos Seleccionados: <strong id="selectedList" style="color:var(--color-rojo); letter-spacing: 0.5px; font-size: 1.25rem;">Ninguno</strong></p>
-                <p style="font-size: 1.1rem; font-weight: bold;">Total a liquidar: <strong id="totalAmount" style="color:var(--color-verde-brillante); font-size:1.6rem;">$0 MXN</strong></p>
+                <p style="color: var(--color-texto-mutado); font-weight: bold; font-size: 1rem;">Ningún boleto seleccionado</p>
             </div>
 
             <p style="font-size: 1.1rem; font-weight: bold; color: var(--color-texto-claro); text-align: center; margin-bottom: 25px;">
@@ -1532,8 +1592,6 @@
         let activeGanadores = JSON.parse(localStorage.getItem('ganadoresList')) || defaultGanadores;
 
         const gridElement = document.getElementById('boletosGrid');
-        const selectedListText = document.getElementById('selectedList');
-        const totalAmountText = document.getElementById('totalAmount');
         const submitBtn = document.getElementById('submitBtn');
 
         function renderTarjetasRifas() {
@@ -1617,6 +1675,63 @@
             renderSelectorTabs();
             generarBoletosSugeridos();
             updateSummary();
+        }
+
+        // Función asistencial para deseleccionar un boleto desde la etiqueta (X)
+        function deseleccionarBoletoBadge(num) {
+            if (selectedTickets.has(num)) {
+                selectedTickets.delete(num);
+                // Desmarcar visualmente en la cuadrícula
+                const el = document.querySelector(`[data-number="${num}"]`);
+                if (el) el.classList.remove('selected');
+                updateSummary();
+            }
+        }
+
+        // Actualización dinámica del bloque de resumen con etiquetas interactivas (CORREGIDA)
+        function updateSummary() {
+            const checkoutBox = document.getElementById('checkoutBoxContainer');
+            const activeConfig = listadoRifas.find(r => r.id === rifaSeleccionadaId);
+            const summaryBlock = document.getElementById('selectionSummaryBlock');
+
+            if (selectedTickets.size > 0 && activeConfig) {
+                // Limpiar contenido anterior
+                summaryBlock.innerHTML = '';
+
+                // Crear el contenedor adaptativo de etiquetas
+                const badgesWrap = document.createElement('div');
+                badgesWrap.className = 'selected-badges-wrap';
+
+                // Generar cada etiqueta dinámica
+                Array.from(selectedTickets).forEach(num => {
+                    const badge = document.createElement('div');
+                    badge.className = 'ticket-badge';
+                    badge.innerHTML = `
+                        <span>${num}</span>
+                        <button class="ticket-badge-remove" onclick="deseleccionarBoletoBadge('${num}')" title="Quitar">×</button>
+                    `;
+                    badgesWrap.appendChild(badge);
+                });
+
+                summaryBlock.appendChild(badgesWrap);
+
+                // Generar línea de resumen formateado: "X BOLETOS · $Y MXN"
+                const summaryLine = document.createElement('div');
+                summaryLine.className = 'summary-text-line';
+                const totalCalculated = selectedTickets.size * activeConfig.price;
+                summaryLine.textContent = `${selectedTickets.size} BOLETO${selectedTickets.size > 1 ? 'S' : ''} · $${totalCalculated} MXN`;
+                
+                summaryBlock.appendChild(summaryLine);
+
+                submitBtn.disabled = false;
+                checkoutBox.style.display = 'block'; 
+                summaryBlock.style.display = 'block';
+            } else {
+                // Mensaje por defecto cuando el carro está vacío
+                summaryBlock.innerHTML = '<p style="color: var(--color-texto-mutado); font-weight: bold; font-size: 1rem;">Ningún boleto seleccionado</p>';
+                submitBtn.disabled = true;
+                checkoutBox.style.display = 'none'; 
+            }
         }
 
         function seleccionarRifaDesdeCartelera(rifaId) {
@@ -1756,23 +1871,6 @@
                 el.style.transform = "scale(1.2)";
                 setTimeout(() => el.style.transform = "scale(1)", 500);
                 triggerFrameFlash(); 
-            }
-        }
-
-        function updateSummary() {
-            const checkoutBox = document.getElementById('checkoutBoxContainer');
-            const activeConfig = listadoRifas.find(r => r.id === rifaSeleccionadaId);
-
-            if (selectedTickets.size > 0 && activeConfig) {
-                selectedListText.textContent = Array.from(selectedTickets).join(', ');
-                totalAmountText.textContent = `$${selectedTickets.size * activeConfig.price} MXN`;
-                submitBtn.disabled = false;
-                checkoutBox.style.display = 'block'; 
-            } else {
-                selectedListText.textContent = 'Ninguno';
-                totalAmountText.textContent = '$0 MXN';
-                submitBtn.disabled = true;
-                checkoutBox.style.display = 'none'; 
             }
         }
 
