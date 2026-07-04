@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifas Lucha México - Sorteos de Campeonato</title>
+    <link class="page-favicon" rel="icon" href="logo.png" type="image/png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700;1,900&display=swap');
+
+        :root {
+            --color-fondo: #050508;         
+            --color-fondo-card: #0e0e12;    
+            --color-verde: #006847;         
+            --color-verde-brillante: #059669; 
+            --color-rojo: #d91d2a;          
+            --color-amarillo: #f59e0b;      
+            --color-texto-claro: #f8fafc;   
+            --color-texto-mutado: #94a3b8;  
+            --color-borde: #22222a;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
+            background-image: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30 25 C20 25 15 33 15 45 C15 57 20 63 30 65 C40 63 45 57 45 45 C45 33 40 25 30 25 Z M25 40 Q27 37 30 40 M35 40 Q33 37 30 40' fill='none' stroke='rgba(0, 104, 71, 0.08)' stroke-width='1.5'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ctext x='80' y='80' fill='rgba(217, 29, 42, 0.06)' font-size='20' text-anchor='middle'%3E🍀%3C/text%3E%3C/svg%3E");
+            background-position: 0 0, 0 0;
+            background-repeat: repeat;
+            color: var(--color-texto-claro);
+            line-height: 1.6;
+            padding: 15px; 
+            padding-top: 20px;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 40px;
+                padding-top: 80px;
+            }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0; }
+
+        /* --- NAVEGACIÓN --- */
+        header {
+            background-color: rgba(5, 5, 8, 0.95); 
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid var(--color-verde);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 20px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.7); 
+            transition: var(--transition-smooth);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-logo {
+            font-family: 'Impact', sans-serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--color-rojo);
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            white-space: nowrap; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.02);
+            color: #ff3344;
+        }
+
+        /* BARRA DEBAJO DEL MENÚ PRINCIPAL */
+        .header-subbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 12px;
+            border-top: 1px solid var(--color-borde);
+            padding-top: 10px;
+        }
+
+        .dynamic-badge-republica {
+            background: rgba(5, 5, 8, 0.95);
+            border: 1.5px solid var(--color-amarillo);
+            border-radius: 30px;
+            padding: 6px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+            animation: pulse-badge 2s infinite alternate;
+            white-space: nowrap;
+        }
+
+        @keyframes pulse-badge {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+
+        .republica-text {
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .republica-beacon {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .beacon-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .beacon-green { background-color: #006847; box-shadow: 0 0 6px #00a86b; animation: blink-beacon 1.2s infinite alternate; }
+        .beacon-white { background-color: #ffffff; box-shadow: 0 0 6px #ffffff; animation: blink-beacon 1.2s infinite alternate 0.4s; }
+        .beacon-rojo { background-color: #d91d2a; box-shadow: 0 0 6px #ff4d4d; animation: blink-beacon 1.2s infinite alternate 0.8s; }
+
+        @keyframes blink-beacon {
+            0% { opacity: 0.4; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+            flex: 1; 
+            justify-content: flex-end; 
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.9rem; 
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 18px;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-links a.highlight-nav {
+            background-color: var(--color-rojo);
+            color: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(217, 29, 42, 0.3);
+        }
+
+        .nav-links a.highlight-nav:hover {
+            background-color: #ff1a2b; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(217, 29, 42, 0.5);
+        }
+
+        /* --- SECCIÓN HÉROE --- */
+        .hero-section { 
+            text-align: center; 
+            padding: 60px 20px; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* NUEVO CONTENEDOR LOGO/SEÑAL ASIMÉTRICO */
+        .logo-container { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 50px; 
+            flex-wrap: wrap;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .official-logo {
+            width: 100%;
+            max-width: 360px; /* Tamaño destacado del logo circular */
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(245, 158, 11, 0.25));
+            animation: float-animation 4s ease-in-out infinite;
+        }
+
+        @keyframes float-animation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .signal-live-badge {
+            background-color: #0e0e12;
+            border: 2px solid var(--color-amarillo);
+            border-radius: 8px;
+            padding: 18px 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+            height: fit-content;
+        }
+
+        .signal-light {
+            width: 16px;
+            height: 16px;
+            background-color: #ef4444; 
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ef4444;
+            animation: flash-signal 1s infinite steps(2);
+        }
+
+        @keyframes flash-signal {
+            0%, 100% { background-color: #ef4444; box-shadow: 0 0 15px #ef4444; }
+            50% { background-color: #7f1d1d; box-shadow: none; }
+        }
+
+        .signal-text {
+            color: var(--color-amarillo);
+            font-family: 'Impact', sans-serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 0px #000;
+        }
+
+        @media (max-width: 768px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .official-logo {
+                max-width: 280px;
+            }
+            .signal-live-badge {
+                padding: 12px 20px;
+            }
+            .signal-text {
+                font-size: 1.15rem;
+            }
+        }
+
+        /* DISEÑO DE CINTA VERDE SKEWED */
+        .ribbon {
+            background-color: var(--color-verde);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 900;
+            padding: 14px 28px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transform: skew(-10deg);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+            margin: 10px 0;
+        }
+
+        .main-title {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: clamp(2.4rem, 6vw, 3.8rem);
+            font-weight: 900;
+            font-style: italic;
+            color: var(--color-rojo);
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            max-width: 900px;
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.6);
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.2vw, 1.2rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            max-width: 750px;
+            color: var(--color-texto-mutado);
+            letter-spacing: 0.5px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-hero-cartelera {
+            background-color: var(--color-amarillo);
+            color: #000000;
+            border: 2px solid var(--color-amarillo);
+            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.25);
+        }
+
+        .btn-hero-cartelera:hover {
+            background-color: #ffc107;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        /* --- BOTÓN FLOTANTE DE WHATSAPP --- */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            z-index: 2000;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) translateY(-3px); background-color: #128c7e; }
+        .whatsapp-float svg { width: 32px; height: 32px; fill: #ffffff; }
+
+        /* --- SECCIÓN TITULOS --- */
+        .section-header-lucha { 
+            text-align: center; 
+            margin-bottom: 50px; 
+            position: relative; 
+        }
+
+        .section-header-lucha h2, .section-header-lucha h3 {
+            font-family: 'Impact', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            color: var(--color-amarillo);
+            text-transform: uppercase;
+            display: inline-block;
+            position: relative;
+            padding: 0 20px;
+            letter-spacing: 1.5px;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        /* --- SECCIÓN RIFAS ACTIVAS --- */
+        .rifas-container-section {
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+
+        .rifas-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 35px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .rifas-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
+        /* Tarjeta Premium de Rifa */
+        .premium-raffle-card {
+            background-color: var(--color-fondo-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-smooth);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .premium-raffle-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-amarillo);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.15);
+        }
+
+        .card-image-wrap {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background-color: #050508;
+        }
+
+        .card-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .premium-raffle-card:hover .card-image-wrap img {
+            transform: scale(1.05);
+        }
+
+        .card-badge-price {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--color-rojo);
+            color: #ffffff;
+            padding: 8px 16px;
+            font-weight: 900;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 20px;
+        }
+
+        .card-title {
+            font-family: 'Impact', sans-serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card-date {
+            font-size: 0.9rem;
+            color: var(--color-amarillo);
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-prizes-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(5, 5, 8, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .card-prizes-list li {
+            font-size: 0.9rem;
+            color: var(--color-texto-claro);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-prizes-list li strong {
+            color: var(--color-amarillo);
+        }
+
+        /* --- GUÍA DE 3 PASOS --- */
+        .pasos-section {
+            background-color: var(--color-fondo-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 16px;
+            padding: 60px 40px;
+            margin-bottom: 60px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .pasos-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+
+        @media(min-width: 768px) { .pasos-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+        .paso-card {
+            background-color: rgba(5, 5, 8, 0.6);
+            border: 1px solid var(--color-borde);
+            border-radius: 12px;
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .paso-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--color-rojo); 
+            box-shadow: 0 8px 25px rgba(217, 29, 42, 0.15); 
+        }
+        
+        .paso-icon { font-size: 3.5rem; margin-bottom: 20px; }
+
+        .paso-card h4 {
+            font-size: 1.1rem; font-weight: 900; margin-bottom: 12px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .paso-card p { font-size: 0.85rem; color: var(--color-texto-mutado); text-align: center; }
+
+        /* --- BARRA DE PROGRESO --- */
+        .progress-container { width: 100%; margin-top: auto; }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--color-texto-mutado);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .progress-bar { background-color: var(--color-fondo); border: 1px solid var(--color-borde); height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, var(--color-verde), var(--color-verde-brillante)); height: 100%; width: 0%; transition: width 0.5s ease-out; }
+
+        /* --- DINÁMICA DE PREMIACIÓN --- */
+        .mecanica-section {
+            background-color: var(--color-fondo-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 16px;
+            padding: 60px 40px;
+            margin-bottom: 60px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .mecanica-intro {
+            text-align: center;
+            color: var(--color-texto-claro);
+            margin-bottom: 40px;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .mecanica-imagen {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 45px;
+        }
+
+        .mecanica-imagen img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 2px solid var(--color-borde);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+
+        .mecanica-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .mecanica-regla {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: #050508;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--color-borde);
+            border-left: 6px solid transparent;
+            transition: var(--transition-smooth);
+        }
+        
+        .mecanica-regla:hover {
+            transform: scale(1.02);
+        }
+
+        .regla-roja { border-left-color: #ff0000; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.1); }
+        .regla-azul { border-left-color: #00bfff; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.1); }
+        .regla-amarilla { border-left-color: #ffff00; box-shadow: 0 4px 15px rgba(255, 255, 0, 0.1); }
+
+        .mecanica-medalla { font-size: 2.5rem; }
+        .mecanica-texto { font-size: 1.1rem; font-weight: 800; line-height: 1.5; }
+
+        /* --- SISTEMA INTERACTIVO DE SELECCIÓN (UNIFICADO) --- */
+        .ticket-system {
+            background-color: var(--color-fondo-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 16px;
+            padding: 60px 40px;
+            margin-bottom: 60px;
+            scroll-margin-top: 130px;
+        }
+
+        /* Selector Visual de Rifa */
+        .raffle-selector-wrap {
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            text-align: center;
+        }
+
+        .raffle-selector-label {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--color-amarillo);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .raffle-selector-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        @media (min-width: 576px) {
+            .raffle-selector-tabs {
+                flex-direction: row;
+            }
+        }
+
+        .raffle-tab-btn {
+            background-color: var(--color-fondo);
+            border: 2px solid var(--color-borde);
+            color: var(--color-texto-mutado);
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: var(--transition-smooth);
+            flex: 1;
+        }
+
+        .raffle-tab-btn:hover {
+            border-color: var(--color-rojo);
+            color: #ffffff;
+        }
+
+        .raffle-tab-btn.active {
+            background-color: var(--color-rojo);
+            border-color: var(--color-rojo);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(217, 29, 42, 0.3);
+        }
+
+        .ticket-controls-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 35px; }
+
+        .control-box-item {
+            background-color: var(--color-fondo);
+            border: 2px solid var(--color-borde);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 280px;
+            max-width: 340px;
+            flex: 1;
+            align-items: center;
+        }
+
+        @media (max-width: 576px) {
+            .control-box-item {
+                min-width: 100%;
+            }
+        }
+
+        .control-box-item label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--color-amarillo);
+            letter-spacing: 0.5px;
+        }
+
+        .control-select, .control-input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--color-fondo-card);
+            border: 2px solid var(--color-borde);
+            color: #ffffff;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            text-align: center;
+        }
+        .control-select:focus, .control-input:focus { outline: none; border-color: var(--color-amarillo); }
+
+        .control-btn {
+            background-color: var(--color-amarillo);
+            color: #000000;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition-smooth);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+        }
+        .control-btn:hover { background-color: #ffc107; transform: translateY(-1px); }
+
+        .btn-clear-control { background-color: #2a3444; color: #ffffff; }
+        .btn-clear-control:hover { background-color: var(--color-rojo); }
+
+        .boletos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 8px;
+            max-height: 480px; 
+            overflow-y: auto;
+            background-color: #050508;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--color-borde);
+            margin-bottom: 40px;
+        }
+
+        @media(min-width: 576px) { .boletos-grid { grid-template-columns: repeat(7, 1fr); } }
+        @media(min-width: 992px) {
+            .boletos-grid {
+                grid-template-columns: repeat(14, 1fr) !important;
+                max-height: none; 
+                gap: 10px;
+                padding: 25px;
+            }
+        }
+
+        .legend-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 10px; }
+        .color-box { width: 18px; height: 18px; border-radius: 4px; }
+        .box-available { background-color: #2a3444; border: 1px dashed rgba(255,255,255,0.15); }
+        .box-selected { background-color: var(--color-rojo); display: flex; align-items: center; justify-content: center; font-size: 11px; color: white; }
+        .box-sold { background-color: #121215; }
+
+        .boleto-item {
+            background-color: #2a3444;
+            color: #ffffff;
+            padding: 14px 4px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 0.75rem; 
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px dashed rgba(255,255,255,0.15);
+            transition: var(--transition-smooth);
+            white-space: nowrap; 
+            letter-spacing: -0.3px; 
+        }
+
+        .boleto-item::before, .boleto-item::after {
+            content: ''; position: absolute; width: 8px; height: 8px; background-color: #050508; border-radius: 50%; top: 50%; transform: translateY(-50%);
+        }
+        .boleto-item::before { left: -4px; }
+        .boleto-item::after { right: -4px; }
+        .boleto-item:active { transform: scale(0.95); }
+
+        .boleto-item.sold {
+            background-color: #121215; color: rgba(255,255,255,0.1); cursor: not-allowed; pointer-events: none; border-color: transparent; box-shadow: none;
+        }
+
+        .boleto-item.selected {
+            background-color: var(--color-rojo) !important;
+            color: transparent !important; 
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(217, 29, 42, 0.6);
+            position: relative;
+        }
+
+        .boleto-item.selected::after {
+            content: '🍀'; 
+            color: white;
+            font-size: 1.1rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkout-box { background-color: #050508; border-radius: 12px; padding: 35px; border: 1px solid var(--color-borde); }
+
+        /* --- FORMULARIOS --- */
+        .checkout-form { display: grid; grid-template-columns: 1fr; gap: 25px; }
+        @media(min-width: 768px) { .checkout-form { grid-template-columns: 1fr 1fr; } }
+
+        .input-group label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--color-texto-mutado); letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+
+        .input-group input, .input-group select {
+            padding: 14px; border-radius: 8px; border: 2px solid var(--color-borde); background-color: var(--color-fondo-card); color: #ffffff; font-size: 0.95rem; width: 100%; transition: var(--transition-smooth);
+        }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--color-verde-brillante); }
+
+        .btn-submit {
+            grid-column: 1 / -1;
+            background-color: var(--color-verde);
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 18px;
+            border-radius: 8px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            transition: var(--transition-smooth);
+        }
+        .btn-submit:hover:not(:disabled) { background-color: var(--color-verde-brillante); transform: translateY(-2px); }
+        .btn-submit:disabled { background-color: #334155; cursor: not-allowed; color: #94a3b8; border-color: #475569; box-shadow: none; }
+
+        /* --- SECCIÓN GANADORES RECIENTES --- */
+        .ganadores-section {
+            background-color: var(--color-fondo-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 16px;
+            padding: 60px 30px;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .ganadores-grid { 
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; 
+            flex-wrap: wrap; 
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .ganador-card {
+            background-color: var(--color-fondo);
+            border: 2px solid var(--color-borde);
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-smooth);
+            width: 300px; 
+            flex-shrink: 0;
+        }
+        .ganador-card:hover { border-color: var(--color-amarillo); transform: translateY(-5px); }
+
+        .ganador-img-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 2px solid var(--color-borde);
+        }
+        .ganador-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .ganador-badge-card {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: var(--color-amarillo);
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .ganador-info { padding: 20px; }
+        .ganador-nombre { font-size: 1.1rem; font-weight: 900; color: #ffffff; margin-bottom: 8px; text-transform: uppercase; }
+        .ganador-premio { color: var(--color-amarillo); font-weight: 700; font-size: 0.9rem; }
+        .ganador-boleto { font-size: 0.85rem; color: var(--color-texto-mutado); margin-top: 8px; }
+
+        /* --- PREGUNTAS FRECUENTES --- */
+        .faq-section { background-color: var(--color-fondo-card); border-radius: 16px; padding: 60px 40px; border: 2px solid var(--color-borde); box-shadow: 0 4px 20px rgba(0,0,0,0.5); margin-bottom: 60px;}
+        .faq-item { border-bottom: 1px solid var(--color-borde); padding: 25px 0; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question { font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: #ffffff; user-select: none; }
+        .faq-question:hover { color: var(--color-amarillo); }
+        .faq-question span { color: var(--color-amarillo); font-size: 0.9rem; display: inline-block; transition: var(--transition-smooth); }
+        .faq-answer { margin-top: 15px; font-size: 0.95rem; color: var(--color-texto-mutado); line-height: 1.6; display: none; padding-left: 20px; border-left: 3px solid var(--color-rojo); }
+
+        /* --- MODALES --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 2500; visibility: hidden; opacity: 0; transition: visibility 0s, opacity 0.25s;
+        }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+
+        .payment-modal {
+            background-color: #ffffff; color: #000000; width: 92%; max-width: 500px; border-radius: 16px; padding: 30px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .modal-close { position: absolute; top: 15px; right: 15px; font-size: 1.8rem; cursor: pointer; border: none; background: none; font-weight: bold; }
+
+        .modal-title-pago {
+            font-family: 'Impact', sans-serif; font-size: 1.8rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 20px; text-align: center; color: #111827;
+        }
+
+        .bank-item { border-bottom: 1px dashed #e2e8f0; padding: 18px 0; cursor: pointer; transition: var(--transition-smooth); }
+        .bank-item:hover { background-color: #f8fafc; }
+        .bank-brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; }
+        .bank-logo-placeholder { width: 36px; height: 20px; background-color: var(--color-rojo); border-radius: 4px; }
+        .bank-card-number { font-family: 'Courier New', Courier, monospace; font-size: 1.25rem; font-weight: 900; letter-spacing: 2px; margin-top: 6px; }
+        .copy-hint { text-align: center; font-size: 0.85rem; background-color: #fdf2f8; color: #db2777; padding: 10px; border-radius: 8px; margin-top: 20px; font-weight: 700; }
+
+        /* --- PIE DE PÁGINA --- */
+        footer { background-color: #07070a; border-top: 3px solid var(--color-verde); padding: 50px 20px; text-align: center; margin-top: 80px; position: relative; z-index: 10; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 25px; }
+        .footer-logo { font-family: 'Impact', sans-serif; font-size: 1.8rem; color: var(--color-rojo); text-decoration: none; letter-spacing: 1.5px; }
+        .footer-contact-info { font-size: 0.95rem; color: var(--color-texto-mutado); max-width: 600px; }
+        .footer-contact-info a { color: var(--color-amarillo); text-decoration: none; font-weight: 700; }
+        .footer-bottom { width: 100%; border-top: 1px solid var(--color-borde); margin-top: 20px; padding-top: 25px; display: flex; flex-direction: column; gap: 15px; font-size: 0.8rem; color: var(--color-texto-mutado); }
+        @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
+        .link-privacidad { color: var(--color-texto-mutado); text-decoration: none; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); }
+        .link-privacidad:hover { color: var(--color-amarillo); }
+
+        .privacy-modal { background-color: #0e0e12; color: #ffffff; border: 2px solid var(--color-borde); width: 92%; max-width: 600px; border-radius: 16px; padding: 35px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
+        .modal-title-privacidad { font-family: 'Impact', sans-serif; font-size: 1.8rem; border-bottom: 2px solid var(--color-borde); padding-bottom: 12px; margin-bottom: 20px; text-align: center; color: var(--color-amarillo); }
+        .privacy-body { font-size: 0.9rem; line-height: 1.6; color: var(--color-texto-mutado); }
+        .privacy-body p { margin-bottom: 15px; }
+
+        /* --- MEJORAS MENÚ MÓVIL --- */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; z-index: 1100; }
+        .menu-toggle .bar { width: 25px; height: 3px; background-color: var(--color-texto-claro); border-radius: 2px; transition: 0.3s; }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: row;
+                align-items: center;
+                padding: 5px 0;
+            }
+            .menu-toggle { 
+                display: flex; 
+                position: absolute;
+                right: 20px;
+                top: 26px;
+            }
+            .nav-links { 
+                position: fixed; 
+                left: -100%; 
+                top: 104px; 
+                flex-direction: column; 
+                background-color: rgba(5, 5, 8, 0.98); 
+                width: 100%; 
+                height: calc(100vh - 104px); 
+                text-align: center; 
+                transition: 0.3s; 
+                padding-top: 40px; 
+                box-shadow: 0 10px 15px rgba(0,0,0,0.5); 
+                border-top: 1px solid var(--color-verde); 
+            }
+            .nav-links.active { left: 0; }
+            .nav-links a { font-size: 1.3rem; padding: 20px; width: 100%; display: block; }
+            .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
+            .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        }
+
+        /* MARCOS DECORATIVOS SVG */
+        .frame-top, .frame-bottom { height: 20px; position: fixed; left: 0; right: 0; z-index: 2500; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='20'%3E%3Cdefs%3E%3Cg id='sparkle'%3E%3Cline x1='27' y1='7' x2='33' y2='13' stroke='%23d4af37' stroke-width='0.5'/%3E%3Cline x1='33' y1='7' x2='27' y2='13' stroke='%23d4af37' stroke-width='0.5'/%3E%3Cline x1='30' y1='2' x2='30' y2='18' stroke='%23d4af37' stroke-width='0.75'/%3E%3Cline x1='22' y1='10' x2='38' y2='10' stroke='%23d4af37' stroke-width='0.75'/%3E%3Cpath d='M30 4L31 9 L36 10L31 11L30 16L29 11L24 10L29 9Z' fill='%23ffd700'/%3E%3C/g%3E%3C/defs%3E%3Cstyle%3E@keyframes blink%7B0%25,100%25%7Bopacity:0.35%3B%7D50%25%7Bopacity:1%3B%7D%7D.st1%7Banimation:blink 4s infinite ease-in-out%3B%7D.st2%7Banimation:blink 5.5s infinite ease-in-out%3B%7D.st3%7Banimation:blink 4.8s infinite ease-in-out%3B%7D.st4%7Banimation:blink 6.2s infinite ease-in-out%3B%7D%3C/style%3E%3Cline x1='0' y1='10' x2='300' y2='10' stroke='%23d4af37' stroke-width='0.5' opacity='0.3'/%3E%3Cuse href='%23sparkle' class='st1' x='0' y='0'/%3E%3Cuse href='%23sparkle' class='st2' x='60' y='0'/%3E%3Cuse href='%23sparkle' class='st3' x='120' y='0'/%3E%3Cuse href='%23sparkle' class='st4' x='180' y='0'/%3E%3Cg opacity='0.25' transform='translate(270, 10)'%3E%3Ccircle cx='-2' cy='-2' r='2' fill='%23059669'/%3E%3Ccircle cx='2' cy='-2' r='2' fill='%23059669'/%3E%3Ccircle cx='0' cy='1.5' r='2.2' fill='%23059669'/%3E%3Cpath d='M0,1.5 Q1,4 3,5' stroke='%23059669' stroke-width='1' fill='none'/%3E%3C/g%3E%3C/svg%3E"); background-repeat: repeat-x; }
+        .frame-top { top: 0; } .frame-bottom { bottom: 0; }
+        .frame-left, .frame-right { width: 20px; position: fixed; top: 0; bottom: 0; z-index: 2500; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='300'%3E%3Cdefs%3E%3Cg id='sparkle-v'%3E%3Cline x1='7' y1='27' x2='13' y2='33' stroke='%23d4af37' stroke-width='0.5'/%3E%3Cline x1='13' y1='27' x2='7' y2='33' stroke='%23d4af37' stroke-width='0.5'/%3E%3Cline x1='10' y1='22' x2='10' y2='38' stroke='%23d4af37' stroke-width='0.75'/%3E%3Cline x1='2' y1='30' x2='18' y2='30' stroke='%23d4af37' stroke-width='0.75'/%3E%3Cpath d='M10 24L11 29L16 30L11 31L10 36L9 31L4 30L9 29Z' fill='%23ffd700'/%3E%3C/g%3E%3C/defs%3E%3Cstyle%3E@keyframes blink%7B0%25,100%25%7Bopacity:0.35%3B%7D50%25%7Bopacity:1%3B%7D%7D.st1%7Banimation:blink 5.5s infinite ease-in-out%3B%7D.st2%7Banimation:blink 7.5s infinite ease-in-out%3B%7D.st3%7Banimation:blink 6.5s infinite ease-in-out%3B%7D.st4%7Banimation:blink 8.5s infinite ease-in-out%3B%7D%3C/style%3E%3Cline x1='10' y1='0' x2='10' y2='300' stroke='%23d4af37' stroke-width='0.5' opacity='0.3'/%3E%3Cuse href='%23sparkle-v' class='st1' x='0' y='0'/%3E%3Cuse href='%23sparkle-v' class='st2' x='0' y='60'/%3E%3Cuse href='%23sparkle-v' class='st3' x='0' y='120'/%3E%3Cuse href='%23sparkle-v' class='st4' x='0' y='180'/%3E%3Cg opacity='0.25' transform='translate(10, 270)'%3E%3Ccircle cx='-2' cy='-2' r='2' fill='%23059669'/%3E%3Ccircle cx='2' cy='-2' r='2' fill='%23059669'/%3E%3Ccircle cx='0' cy='1.5' r='2.2' fill='%23059669'/%3E%3Cpath d='M0,1.5 Q1,4 3,5' stroke='%23059669' stroke-width='1' fill='none'/%3E%3C/g%3E%3C/svg%3E"); background-repeat: repeat-y; }
+        .frame-left { left: 0; } .frame-right { right: 0; }
+        .frame-flash { filter: brightness(2) drop-shadow(0 0 10px var(--color-amarillo)) !important; }
+    </style>
+</head>
+<body>
+    <div class="frame-top"></div>
+    <div class="frame-bottom"></div>
+    <div class="frame-left"></div>
+    <div class="frame-right"></div>
+    
+    <!-- MENÚ DE NAVEGACIÓN -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="nav-logo">🍀 RIFAS LUCHA MX</a>
+            
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Abrir menú">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <nav class="nav-links" id="nav-menu">
+                <a href="#rifas-activas" class="highlight-nav" onclick="closeMenu()">Sorteo Vigente</a>
+                <a href="#participar" onclick="closeMenu()">Cómo Participar</a>
+                <a href="#como-funciona" onclick="closeMenu()">Cómo Funciona</a>
+                <a href="#boletos" onclick="closeMenu()">Comprar Boletos</a>
+                <a href="#faq" onclick="closeMenu()">Ayuda</a>
+            </nav>
+        </div>
+        
+        <div class="header-subbar">
+            <div class="dynamic-badge-republica">
+                <div class="republica-beacon">
+                    <span class="beacon-dot beacon-green"></span>
+                    <span class="beacon-dot beacon-white"></span>
+                    <span class="beacon-dot beacon-rojo"></span>
+                </div>
+                <span class="republica-text">¡Se puede participar de toda la República!</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- CABECERA PRINCIPAL -->
+        <section class="hero-section">
+            <!-- CONTENEDOR REDISEÑADO CON LOGO A LA IZQUIERDA Y SEÑAL EN VIVO A LA DERECHA -->
+            <div class="logo-container">
+                <img src="logo.png" alt="Rifas Lucha México" class="official-logo">
+                <div class="signal-live-badge">
+                    <div class="signal-light"></div>
+                    <span class="signal-text">SORTEO DE LA RIFA EN VIVO</span>
+                </div>
+            </div>
+            
+            <!-- CINTA DEBAJO DEL BLOQUE LOGO/SEÑAL -->
+            <div class="ribbon">🎟️ BOLETOS PARA LA RIFA MÁS ESPERADA EN MÉXICO 🎟️</div>
+            
+            <h1 class="main-title">3 GANADORES, 3 CAÍDAS! ¡Múltiples oportunidades de ganar!</h1>
+            <p class="subtitle">Súbete al cuadrilátero estelar de la suerte y llévate premios de campeonato.</p>
+            <div>
+                <a href="#rifas-activas" class="btn btn-hero-cartelera">🔥 Ver Cartelera de Rifas</a>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE RIFAS ACTIVAS -->
+        <section id="rifas-activas" class="rifas-container-section">
+            <div class="section-header-lucha">
+                <h2>🔥 Rifas Activas</h2>
+            </div>
+            <div class="rifas-cards-grid" id="rifasCardsGrid">
+                <!-- Se genera dinámicamente con JS -->
+            </div>
+        </section>
+
+        <!-- PARTICIPA EN 3 PASOS -->
+        <section id="participar" class="pasos-section">
+            <div class="section-header-lucha">
+                <h2>¿Cómo participar?</h2>
+            </div>
+            <div class="pasos-grid">
+                <div class="paso-card" onclick="document.getElementById('boletos').scrollIntoView({behavior: 'smooth', block: 'start'});">
+                    <div class="paso-icon">🎟️</div>
+                    <h4>1. Elige y Regístrate</h4>
+                    <p>Selecciona tus boletos en la boletera única abajo y completa tus datos para apartarlos.</p>
+                </div>
+                <div class="paso-card" onclick="abrirModalPago()">
+                    <div class="paso-icon">💳</div>
+                    <h4>2. Realiza tu Pago</h4>
+                    <p>Haz tu pago por depósito, transferencia bancaria o Spin por OXXO y guarda tu comprobante.</p>
+                </div>
+                <div class="paso-card" onclick="document.getElementById('boletos').scrollIntoView({behavior: 'smooth', block: 'start'});">
+                    <div class="paso-icon">📤</div>
+                    <h4>3. Sube tu Comprobante</h4>
+                    <p>Carga la foto de tu comprobante en la taquilla para registrar y validar tus folios oficialmente.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DINÁMICA DE PREMIACIÓN -->
+        <section id="como-funciona" class="mecanica-section">
+            <div class="section-header-lucha">
+                <h3>¿Cómo se elige a los ganadores?</h3>
+            </div>
+            <p class="mecanica-intro">
+                Nuestros sorteos se basan en los resultados de la Lotería Nacional.<br>
+                Se forma tu boleto de 6 dígitos uniendo las siguientes posiciones del sorteo correspondiente:
+            </p>
+            <div class="mecanica-imagen">
+                <img src="ejemplo-loteria.png" alt="Ejemplo de combinación ganadora de la Lotería Nacional">
+            </div>
+            <div class="mecanica-grid">
+                <div class="mecanica-regla regla-roja">
+                    <div class="mecanica-medalla">🥇</div>
+                    <div class="mecanica-texto">Se toman los últimos 3 dígitos del 1er premio <span style="color:var(--color-rojo);">MÁS</span> los últimos 3 dígitos del 2do premio para determinar el primer lugar.</div>
+                </div>
+                <div class="mecanica-regla regla-azul">
+                    <div class="mecanica-medalla">🥈</div>
+                    <div class="mecanica-texto">Se toman los últimos 3 dígitos del 3er premio <span style="color:#00bfff;">MÁS</span> los últimos 3 dígitos del 4to premio para determinar el segundo lugar.</div>
+                </div>
+                <div class="mecanica-regla regla-amarilla">
+                    <div class="mecanica-medalla">🥉</div>
+                    <div class="mecanica-texto">Se toman los últimos 3 dígitos del 5to premio <span style="color:var(--color-amarillo);">MÁS</span> los últimos 3 dígitos del 6to premio para determinar el tercer lugar.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SISTEMA INTERACTIVO DE SELECCIÓN (UNIFICADO) -->
+        <section id="boletos" class="ticket-system">
+            <div class="section-header-lucha">
+                <h3>Adquiere tus Boletos</h3>
+            </div>
+
+            <!-- SELECTOR VISUAL DE RIFA -->
+            <div class="raffle-selector-wrap">
+                <span class="raffle-selector-label">¿Para cuál sorteo deseas comprar tus boletos?</span>
+                <div class="raffle-selector-tabs" id="raffleSelectorTabs">
+                    <!-- Se genera dinámicamente -->
+                </div>
+            </div>
+
+            <div class="ticket-controls-row">
+                <div class="control-box-item">
+                    <label for="randomQtySelect">Boletos al Azar</label>
+                    <select id="randomQtySelect" class="control-select">
+                        <option value="1">1 BOLETO</option>
+                        <option value="2">2 BOLETOS</option>
+                        <option value="3">3 BOLETOS</option>
+                        <option value="5">5 BOLETOS</option>
+                        <option value="10">10 BOLETOS</option>
+                        <option value="20">20 BOLETOS</option>
+                        <option value="50">50 BOLETOS</option>
+                    </select>
+                    <button class="control-btn" onclick="comprarAlAzarSelect()">🎲 Elegir al azar</button>
+                </div>
+                <div class="control-box-item">
+                    <label for="searchInput">Buscar Número</label>
+                    <input type="text" id="searchInput" class="control-input" placeholder="Folio (ej: 863914)" maxlength="6">
+                    <div style="display: flex; gap: 8px; width: 100%;">
+                        <button class="control-btn" onclick="buscarNumero()">Buscar</button>
+                        <button class="control-btn btn-clear-control" onclick="limpiarBusqueda()">✕</button>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="font-size: 0.9rem; color: var(--color-texto-mutado); text-align: center; margin-bottom: 20px;">
+                Sugerencias de disponibles: 
+                <button onclick="generarBoletosSugeridos()" style="background:none; border:none; color:var(--color-amarillo); font-weight:bold; cursor:pointer; text-decoration:underline;">Actualizar lista</button>
+                | <button onclick="limpiarSeleccion()" style="background:none; border:none; color:var(--color-rojo); font-weight:bold; cursor:pointer; text-decoration:underline;">🧹 Vaciar Carrito</button>
+            </p>
+
+            <div class="legend-row">
+                <div class="legend-item"><div class="color-box box-available"></div><span>Disponible</span></div>
+                <div class="legend-item"><div class="color-box box-selected">🍀</div><span>Seleccionado</span></div>
+                <div class="legend-item"><div class="color-box box-sold"></div><span>Reservado/Vendido</span></div>
+            </div>
+
+            <div id="selectionSummaryBlock" style="background-color: #0c0c0f; border: 2px solid var(--color-borde); border-radius: 12px; padding: 25px; margin-bottom: 35px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                <p style="font-size: 1.1rem; font-weight: bold; margin-bottom: 10px;">Boletos Seleccionados: <strong id="selectedList" style="color:var(--color-rojo); letter-spacing: 0.5px; font-size: 1.25rem;">Ninguno</strong></p>
+                <p style="font-size: 1.1rem; font-weight: bold;">Total a liquidar: <strong id="totalAmount" style="color:var(--color-verde-brillante); font-size:1.6rem;">$0 MXN</strong></p>
+            </div>
+
+            <p style="font-size: 1.1rem; font-weight: bold; color: var(--color-texto-claro); text-align: center; margin-bottom: 25px;">
+                Selecciona tus boletos de la taquilla de abajo ⬇️
+            </p>
+            <div class="boletos-grid" id="boletosGrid">
+                <!-- Se genera dinámicamente -->
+            </div>
+
+            <div class="checkout-box" id="checkoutBoxContainer" style="display: none;">
+                <h4 style="text-align: center; color: var(--color-amarillo); text-transform: uppercase; margin-bottom: 25px; font-size: 1.2rem;">Completa tu Registro de Boletos</h4>
+                <form class="checkout-form" id="reserveForm" onsubmit="procesarReservaLocal(event)">
+                    <div class="input-group">
+                        <label for="buyerName">Nombre Completo</label>
+                        <input type="text" id="buyerName" required placeholder="Escribe tu nombre completo">
+                    </div>
+                    <div class="input-group">
+                        <label for="buyerPhone">Número de WhatsApp</label>
+                        <input type="tel" id="buyerPhone" required placeholder="Ej. 5512345678" pattern="[0-9]{10}">
+                    </div>
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label for="buyerState">Selecciona tu Estado</label>
+                        <select id="buyerState" required>
+                            <option value="">-- Selecciona un estado --</option>
+                            <option value="Ciudad de México">Ciudad de México</option>
+                            <option value="Jalisco">Jalisco</option>
+                            <option value="Nuevo León">Nuevo León</option>
+                            <option value="Aguascalientes">Aguascalientes</option>
+                            <option value="Baja California">Baja California</option>
+                            <option value="Chihuahua">Chihuahua</option>
+                            <option value="Guanajuato">Guanajuato</option>
+                            <option value="Puebla">Puebla</option>
+                            <option value="Querétaro">Querétaro</option>
+                            <option value="Veracruz">Veracruz</option>
+                            <option value="Yucatán">Yucatán</option>
+                            <option value="Otro">Otro Estado...</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label for="buyerProof" style="color: var(--color-amarillo);">Subir Comprobante de Pago (Imagen)</label>
+                        <input type="file" id="buyerProof" accept="image/*" required style="padding: 10px;">
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitBtn" disabled>CONFIRMAR BOLETOS Y SUBIR COMPROBANTE</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- PREGUNTAS FRECUENTES -->
+        <section id="faq" class="faq-section">
+            <div class="section-header-lucha">
+                <h3>Preguntas Frecuentes</h3>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">¿Cómo se elige al ganador? <span>▼</span></div>
+                <div class="faq-answer">Todos nuestros sorteos se realizan con base en los resultados de la Lotería Nacional de México para asegurar total transparencia.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">¿Cuánto tiempo tengo para pagar mi boleto? <span>▼</span></div>
+                <div class="faq-answer">Una vez reservados tus números, dispones de un periodo de 12 horas para efectuar el pago y subir tu comprobante directamente en la página.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">¿Cuáles son los métodos de pago aceptados? <span>▼</span></div>
+                <div class="faq-answer">Aceptamos transferencias electrónicas SPEI, depósitos en tiendas OXXO y corresponsalías bancarias autorizadas.</div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE GANADORES RECIENTES -->
+        <section class="ganadores-section">
+            <div class="section-header-lucha">
+                <h3>Ganadores Anteriores</h3>
+            </div>
+            <div class="ganadores-grid" id="ganadoresGrid">
+                <!-- Se genera dinámicamente con JS -->
+            </div>
+        </section>
+    </div>
+
+    <!-- MODALES DE ASISTENCIA -->
+    <div class="modal-overlay" id="modalPago" onclick="cerrarModalPago(event)">
+        <div class="payment-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="cerrarModalPagoDirecto()">×</button>
+            <h3 class="modal-title-pago">🏦 Cuentas Disponibles</h3>
+            <p style="font-size: 0.9rem; text-align: center; color: #64748b; margin-bottom: 20px;">Toca una cuenta para copiar el número de inmediato.</p>
+            
+            <div class="bank-item" onclick="copiarTexto('4152314237767739', 'BBVA')">
+                <div class="bank-brand"><div class="bank-logo-placeholder" style="background-color: #004481;"></div><span>BBVA</span></div>
+                <div style="font-size:0.85rem; color:#64748b;">Titular: ALMA FIGUEROA</div>
+                <div class="bank-card-number">4152 3142 3776 7739</div>
+            </div>
+            <div class="bank-item" onclick="copiarTexto('4217470091678355', 'Spin by OXXO')">
+                <div class="bank-brand"><div class="bank-logo-placeholder" style="background-color: #4f46e5;"></div><span>SPIN BY OXXO</span></div>
+                <div style="font-size:0.85rem; color:#64748b;">Titular: DANIEL HERNANDEZ</div>
+                <div class="bank-card-number">4217 4700 9167 8355</div>
+            </div>
+            <div class="copy-hint">👆 ¡Toca cualquier cuenta para copiar!</div>
+        </div>
+    </div>
+
+    <!-- MODAL AVISO DE PRIVACIDAD -->
+    <div class="modal-overlay" id="modalPrivacidad" onclick="cerrarModalPrivacidad(event)">
+        <div class="privacy-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="cerrarModalPrivacidadDirecto()">×</button>
+            <h3 class="modal-title-privacidad">📄 Aviso de Privacidad</h3>
+            <div class="privacy-body">
+                <p>En cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), <strong>Rifas Lucha México</strong>, declara ser el responsable de recabar, tratar y proteger los datos personales que usted nos proporciona.</p>
+                <p>Los datos que nos proporciona serán utilizados exclusivamente para los fines de reserva, validación de boletos para el sorteo seleccionado, confirmación oficial por mensajería y contacto en caso de resultar ganador de acuerdo con los sorteos oficiales de la Lotería Nacional.</p>
+                <p>Usted puede ejercer sus derechos ARCO enviando una solicitud formal a través de nuestro correo de contacto.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POLÍTICAS DE SERVICIO -->
+    <div class="modal-overlay" id="modalPoliticas" onclick="cerrarModalPoliticas(event)">
+        <div class="privacy-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="cerrarModalPoliticasDirecto()">×</button>
+            <h3 class="modal-title-privacidad">📜 Políticas de Servicio</h3>
+            <div class="privacy-body">
+                <p><strong>A)</strong> Cada rifa es independiente del resto y cuenta con su respectiva bolsa de premios indicada al inicio de su publicación oficial.</p>
+                <p><strong>B)</strong> Para llevar a cabo el sorteo de manera oportuna, debe estar cubierto un mínimo del 85% de los boletos emitidos. En caso contrario, se informará una nueva fecha de realización.</p>
+                <p><strong>C)</strong> El ganador de cada premio deberá mostrar identificación oficial coincidente con los datos de registro ingresados al apartar el boleto.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EXITO -->
+    <div class="modal-overlay" id="modalExito" onclick="cerrarModalExito(event)">
+        <div class="payment-modal" onclick="event.stopPropagation()" style="text-align: center;">
+            <button class="modal-close" onclick="cerrarModalExitoDirecto()">×</button>
+            <div style="font-size: 3.5rem; margin-bottom: 15px;">🏆</div>
+            <h3 class="modal-title-pago" style="border-bottom: none; margin-bottom: 10px; color: var(--color-verde-brillante);">¡REGISTRO EXITOSO!</h3>
+            <p style="font-size: 0.9rem; font-weight: bold; text-transform: uppercase; margin-bottom: 20px;">Tus números han sido registrados en el sorteo</p>
+            
+            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+                    <span style="color: #64748b; font-weight: bold;">Luchador Comprador:</span>
+                    <strong id="successBuyerName">-</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+                    <span style="color: #64748b; font-weight: bold;">Boletos Reservados:</span>
+                    <strong id="successTickets" style="color: var(--color-rojo);">-</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-top: 6px;">
+                    <span style="color: #64748b; font-weight: bold;">Total a liquidar:</span>
+                    <strong id="successTotal" style="color: var(--color-verde-brillante);">-</strong>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <a id="successWhatsappBtn" href="#" target="_blank" class="btn" style="display: flex; align-items: center; justify-content: center; background-color: #25d366 !important; border-color: #25d366 !important; color: white !important; width: 100%;">
+                    Notificar por WhatsApp
+                </a>
+                <button class="btn btn-hero-cartelera" onclick="cerrarModalExitoDirecto()" style="width: 100%; border: none;">Regresar a la Taquilla</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="footer-logo">🍀 RIFAS LUCHA MÉXICO 🍀</a>
+            <div class="footer-contact-info">
+                <p>Contáctanos en: <a href="mailto:contacto@rifasluchamexico.com">contacto@rifasluchamexico.com</a></p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Rifas Lucha México.</p>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+                    <span class="link-privacidad" onclick="abrirModalPoliticas()">Políticas de Servicio</span>
+                    <span class="link-privacidad" onclick="abrirModalPrivacidad()">Aviso de Privacidad</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÓGICA FRONTEND -->
+    <script>
+        // Menú móvil
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('is-active');
+            navMenu.classList.toggle('active');
+        });
+        function closeMenu() {
+            menuBtn.classList.remove('is-active');
+            navMenu.classList.remove('active');
+        }
+
+        const maxBoletoPosible = 999999; 
+        const selectedTickets = new Set();
+
+        // Configuración inicial de 3 rifas de respaldo
+        const defaultRifas = [
+            {
+                id: "rifa1",
+                active: true, 
+                title: "🏆 Sorteo Estelar de Campeonato",
+                date: "30 de Mayo",
+                price: 50,
+                prize1: "iPhone Último Modelo",
+                prize2: "iPad Retina Display",
+                prize3: "$5,000 MXN en Efectivo",
+                progress: 65,
+                main_img: "logo.png" // Usar tu logo o imagen en el panel
+            },
+            {
+                id: "rifa2",
+                active: true, 
+                title: "🥋 Sorteo Máscara de Oro",
+                date: "15 de Junio",
+                price: 100,
+                prize1: "Viaje a Cancún para 2",
+                prize2: "PlayStation 5",
+                prize3: "$10,000 MXN en Efectivo",
+                progress: 42,
+                main_img: "logo.png"
+            },
+            {
+                id: "rifa3",
+                active: true, 
+                title: "🥊 Sorteo Leyendas del Ring",
+                date: "5 de Julio",
+                price: 35,
+                prize1: "Motoneta Deportiva",
+                prize2: "Smart TV 55\"",
+                prize3: "Audífonos Bluetooth",
+                progress: 10,
+                main_img: "logo.png"
+            }
+        ];
+
+        // Sincronización con el Panel de Control externo a través de localStorage
+        let listadoRifas = JSON.parse(localStorage.getItem('sorteoConfigMultirifa')) || defaultRifas;
+
+        if (!Array.isArray(listadoRifas) || listadoRifas.length === 0) {
+            listadoRifas = defaultRifas;
+        }
+
+        const obtenerRifasActivas = () => listadoRifas.filter(r => r.active);
+
+        let rifasActivasActuales = obtenerRifasActivas();
+        let rifaSeleccionadaId = rifasActivasActuales.length > 0 ? rifasActivasActuales[0].id : listadoRifas[0].id;
+
+        let databaseBoletos = JSON.parse(localStorage.getItem('databaseBoletosMultirifa')) || {};
+        
+        function saveDatabase() { 
+            localStorage.setItem('databaseBoletosMultirifa', JSON.stringify(databaseBoletos)); 
+        }
+
+        const defaultGanadores = [
+            { id: 1, name: "CARLOS ORTIZ", ticket: "000112", prize: "iPad Retina Display", img: "logo.png" },
+            { id: 2, name: "ALBERTO GÓMEZ", ticket: "000088", prize: "$5,000 en Efectivo", img: "logo.png" },
+            { id: 3, name: "SANTIAGO RUIZ", ticket: "000452", prize: "iPhone Último Modelo", img: "logo.png" }
+        ];
+
+        let activeGanadores = JSON.parse(localStorage.getItem('ganadoresList')) || defaultGanadores;
+
+        const gridElement = document.getElementById('boletosGrid');
+        const selectedListText = document.getElementById('selectedList');
+        const totalAmountText = document.getElementById('totalAmount');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function renderTarjetasRifas() {
+            const container = document.getElementById('rifasCardsGrid');
+            container.innerHTML = '';
+            
+            const activas = obtenerRifasActivas();
+            
+            if (activas.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--color-texto-mutado); width: 100%; font-size: 1.1rem; padding: 40px 0;">No hay sorteos activos en este momento.</p>';
+                return;
+            }
+
+            activas.forEach(rifa => {
+                const card = document.createElement('div');
+                card.className = 'premium-raffle-card';
+                card.innerHTML = `
+                    <div class="card-image-wrap">
+                        <img src="${rifa.main_img}" alt="${rifa.title}">
+                        <div class="card-badge-price">$${rifa.price} MXN</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-date">📅 Próxima Rifa: ${rifa.date}</div>
+                        <h3 class="card-title">${rifa.title}</h3>
+                        <ul class="card-prizes-list">
+                            <li>🥇 <strong>1er Lugar:</strong> ${rifa.prize1}</li>
+                            <li>🥈 <strong>2do Lugar:</strong> ${rifa.prize2}</li>
+                            <li>🥉 <strong>3er Lugar:</strong> ${rifa.prize3}</li>
+                        </ul>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Progreso de Venta</span>
+                                <span>${rifa.progress}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${rifa.progress}%"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-hero-cartelera" style="width:100%;" onclick="seleccionarRifaDesdeCartelera('${rifa.id}')">
+                            Participar
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderSelectorTabs() {
+            const container = document.getElementById('raffleSelectorTabs');
+            container.innerHTML = '';
+            
+            const activas = obtenerRifasActivas();
+            
+            if (activas.length === 0) {
+                container.innerHTML = '<p style="color:var(--color-texto-mutado); font-weight:bold;">No hay rifas disponibles para selección.</p>';
+                return;
+            }
+
+            activas.forEach(rifa => {
+                const btn = document.createElement('button');
+                btn.className = `raffle-tab-btn ${rifa.id === rifaSeleccionadaId ? 'active' : ''}`;
+                btn.textContent = rifa.title;
+                btn.onclick = () => cambiarRifaSeleccionada(rifa.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function cambiarRifaSeleccionada(rifaId) {
+            rifaSeleccionadaId = rifaId;
+            selectedTickets.clear(); 
+            
+            const btns = document.querySelectorAll('.raffle-tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            
+            const rifaActual = listadoRifas.find(r => r.id === rifaId);
+            if (rifaActual) {
+                const activeBtn = Array.from(btns).find(btn => btn.textContent.trim().toUpperCase() === rifaActual.title.toUpperCase());
+                if (activeBtn) activeBtn.classList.add('active');
+            }
+
+            renderSelectorTabs();
+            generarBoletosSugeridos();
+            updateSummary();
+        }
+
+        function seleccionarRifaDesdeCartelera(rifaId) {
+            cambiarRifaSeleccionada(rifaId);
+            document.getElementById('boletos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderGanadores() {
+            const container = document.getElementById('ganadoresGrid');
+            container.innerHTML = '';
+            
+            if (activeGanadores.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; color: var(--color-texto-mutado); text-align: center;">Aún no hay ganadores registrados.</p>';
+                return;
+            }
+
+            const ganadoresAMostrar = activeGanadores.slice(-3);
+
+            ganadoresAMostrar.forEach(ganador => {
+                const card = document.createElement('div');
+                card.classList.add('ganador-card');
+                card.innerHTML = `
+                    <div class="ganador-img-container">
+                        <span class="ganador-badge-card">Ganador</span>
+                        <img src="${ganador.img}" class="ganador-img" alt="${ganador.name}">
+                    </div>
+                    <div class="ganador-info">
+                        <div class="ganador-nombre">${ganador.name}</div>
+                        <div class="ganador-premio">🏆 ${ganador.prize}</div>
+                        <div class="ganador-boleto">Boleto ganador: <strong>#${ganador.ticket}</strong></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        let boletosSugeridosActuales = [];
+        function generarBoletosSugeridos() {
+            boletosSugeridosActuales = [];
+            while (boletosSugeridosActuales.length < 196) { 
+                const randomNum = String(Math.floor(Math.random() * maxBoletoPosible)).padStart(6, '0');
+                if (!boletosSugeridosActuales.includes(randomNum)) boletosSugeridosActuales.push(randomNum);
+            }
+            renderGrid();
+        }
+
+        function renderGrid() {
+            gridElement.innerHTML = '';
+            const rifaDb = databaseBoletos[rifaSeleccionadaId] || {};
+
+            boletosSugeridosActuales.forEach(num => {
+                const ticketDiv = document.createElement('div');
+                ticketDiv.classList.add('boleto-item');
+                ticketDiv.textContent = num;
+                ticketDiv.dataset.number = num;
+
+                if (rifaDb[num]) {
+                    if (rifaDb[num].status === 'pagado') {
+                        ticketDiv.classList.add('sold');
+                    } else if (rifaDb[num].status === 'apartado') {
+                        ticketDiv.classList.add('selected');
+                        ticketDiv.style.opacity = '0.6';
+                    }
+                } else if (selectedTickets.has(num)) {
+                    ticketDiv.classList.add('selected');
+                }
+
+                ticketDiv.addEventListener('click', () => toggleSelectTicket(num, ticketDiv));
+                gridElement.appendChild(ticketDiv);
+            });
+        }
+
+        function triggerFrameFlash() {
+            const frames = document.querySelectorAll('.frame-top, .frame-bottom, .frame-left, .frame-right');
+            frames.forEach(f => f.classList.add('frame-flash'));
+            setTimeout(() => frames.forEach(f => f.classList.remove('frame-flash')), 500);
+        }
+
+        function toggleSelectTicket(num, element) {
+            const rifaDb = databaseBoletos[rifaSeleccionadaId] || {};
+            if (rifaDb[num] && rifaDb[num].status === 'pagado') return;
+
+            if (selectedTickets.has(num)) {
+                selectedTickets.delete(num);
+                element.classList.remove('selected');
+            } else {
+                selectedTickets.add(num);
+                element.classList.add('selected');
+                triggerFrameFlash(); 
+            }
+            updateSummary();
+        }
+
+        function seleccionarAleatorios(cantidad) {
+            let agregados = 0, intentos = 0;
+            const limiteIntentos = cantidad * 10; 
+            const rifaDb = databaseBoletos[rifaSeleccionadaId] || {};
+
+            while (agregados < cantidad && intentos < limiteIntentos) {
+                const randomNum = String(Math.floor(Math.random() * maxBoletoPosible)).padStart(6, '0');
+                if (!rifaDb[randomNum] && !selectedTickets.has(randomNum)) {
+                    selectedTickets.add(randomNum);
+                    const el = document.querySelector(`[data-number="${randomNum}"]`);
+                    if (el) el.classList.add('selected');
+                    agregados++;
+                }
+                intentos++;
+            }
+            if (agregados > 0) triggerFrameFlash(); 
+            updateSummary();
+        }
+
+        function comprarAlAzarSelect() {
+            const selectEl = document.getElementById('randomQtySelect');
+            const cantidad = parseInt(selectEl.value);
+            if (!isNaN(cantidad) && cantidad > 0) seleccionarAleatorios(cantidad);
+        }
+
+        function limpiarSeleccion() { selectedTickets.clear(); renderGrid(); updateSummary(); }
+        function limpiarBusqueda() { document.getElementById('searchInput').value = ''; generarBoletosSugeridos(); }
+
+        function buscarNumero() {
+            const val = document.getElementById('searchInput').value.trim().padStart(6, '0');
+            if (val.length !== 6 || isNaN(val)) { alert('Por favor introduce un número de 6 dígitos válido.'); return; }
+            
+            const rifaDb = databaseBoletos[rifaSeleccionadaId] || {};
+            if (rifaDb[val] && rifaDb[val].status === 'pagado') { alert(`El folio #${val} ya se encuentra vendido.`); return; }
+            
+            if (!boletosSugeridosActuales.includes(val)) { 
+                boletosSugeridosActuales.unshift(val); 
+                renderGrid(); 
+            }
+            
+            const el = document.querySelector(`[data-number="${val}"]`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.style.transform = "scale(1.2)";
+                setTimeout(() => el.style.transform = "scale(1)", 500);
+                triggerFrameFlash(); 
+            }
+        }
+
+        function updateSummary() {
+            const checkoutBox = document.getElementById('checkoutBoxContainer');
+            const activeConfig = listadoRifas.find(r => r.id === rifaSeleccionadaId);
+
+            if (selectedTickets.size > 0 && activeConfig) {
+                selectedListText.textContent = Array.from(selectedTickets).join(', ');
+                totalAmountText.textContent = `$${selectedTickets.size * activeConfig.price} MXN`;
+                submitBtn.disabled = false;
+                checkoutBox.style.display = 'block'; 
+            } else {
+                selectedListText.textContent = 'Ninguno';
+                totalAmountText.textContent = '$0 MXN';
+                submitBtn.disabled = true;
+                checkoutBox.style.display = 'none'; 
+            }
+        }
+
+        function procesarReservaLocal(e) {
+            e.preventDefault();
+            const name = document.getElementById('buyerName').value.trim();
+            const phone = document.getElementById('buyerPhone').value.trim();
+            const state = document.getElementById('buyerState').value;
+            const proofFile = document.getElementById('buyerProof').files[0];
+            
+            if (!proofFile) { alert("Sube tu comprobante de pago."); return; }
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = "Procesando...";
+
+            const activeConfig = listadoRifas.find(r => r.id === rifaSeleccionadaId);
+
+            const lector = new FileReader();
+            lector.onload = function(event) {
+                const base64Img = event.target.result;
+                const numbers = Array.from(selectedTickets).join(', ');
+                const totalCalculated = selectedTickets.size * activeConfig.price;
+
+                if (!databaseBoletos[rifaSeleccionadaId]) {
+                    databaseBoletos[rifaSeleccionadaId] = {};
+                }
+
+                selectedTickets.forEach(t => {
+                    databaseBoletos[rifaSeleccionadaId][t] = {
+                        name: name.toUpperCase(), phone: phone, state: state, status: 'apartado', 
+                        date: new Date().toISOString().replace('T', ' ').substring(0, 19), proofImg: base64Img
+                    };
+                });
+                saveDatabase();
+                triggerFrameFlash(); 
+
+                document.getElementById('successBuyerName').textContent = name.toUpperCase();
+                document.getElementById('successTickets').textContent = Array.from(selectedTickets).map(t => `#${t}`).join(', ');
+                document.getElementById('successTotal').textContent = `$${totalCalculated} MXN`;
+                
+                const waText = encodeURIComponent(`Hola, registré mis boletos (${numbers}) para la rifa "${activeConfig.title}". Adjunto mi comprobante a nombre de ${name.toUpperCase()}.`);
+                document.getElementById('successWhatsappBtn').href = `https://wa.me/525512345678?text=${waText}`;
+
+                abrirModalExito();
+                selectedTickets.clear();
+                document.getElementById('reserveForm').reset();
+                renderGrid();
+                updateSummary();
+                btn.textContent = "CONFIRMAR BOLETOS Y SUBIR COMPROBANTE";
+                btn.disabled = true;
+            };
+            lector.readAsDataURL(proofFile);
+        }
+
+        // Modales asistenciales
+        function abrirModalExito() { document.getElementById('modalExito').classList.add('active'); }
+        function cerrarModalExito(e) { if (e.target === document.getElementById('modalExito')) cerrarModalExitoDirecto(); }
+        function cerrarModalExitoDirecto() { document.getElementById('modalExito').classList.remove('active'); }
+
+        function abrirModalPago() { document.getElementById('modalPago').classList.add('active'); }
+        function cerrarModalPago(e) { if (e.target === document.getElementById('modalPago')) cerrarModalPagoDirecto(); }
+        function cerrarModalPagoDirecto() { document.getElementById('modalPago').classList.remove('active'); }
+
+        function abrirModalPrivacidad() { document.getElementById('modalPrivacidad').classList.add('active'); }
+        function cerrarModalPrivacidad(e) { if (e.target === document.getElementById('modalPrivacidad')) cerrarModalPrivacidadDirecto(); }
+        function cerrarModalPrivacidadDirecto() { document.getElementById('modalPrivacidad').classList.remove('active'); }
+        
+        function abrirModalPoliticas() { document.getElementById('modalPoliticas').classList.add('active'); }
+        function cerrarModalPoliticas(e) { if (e.target === document.getElementById('modalPoliticas')) cerrarModalPoliticasDirecto(); }
+        function cerrarModalPoliticasDirecto() { document.getElementById('modalPoliticas').classList.remove('active'); }
+
+        function copiarTexto(texto, banco) {
+            navigator.clipboard.writeText(texto).then(() => { alert(`Copiado: Cuenta ${banco} (${texto}) copiada al portapapeles.`); });
+        }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const arrow = element.querySelector('span');
+            const isVisible = window.getComputedStyle(answer).display === 'block';
+            if (isVisible) {
+                answer.style.display = "none";
+                arrow.style.transform = "rotate(0deg)";
+            } else {
+                answer.style.display = "block";
+                arrow.style.transform = "rotate(180deg)";
+            }
+        }
+
+        window.onclick = function(e) {
+            if (e.target === document.getElementById('modalPago')) cerrarModalPagoDirecto();
+            if (e.target === document.getElementById('modalPrivacidad')) cerrarModalPrivacidadDirecto();
+            if (e.target === document.getElementById('modalPoliticas')) cerrarModalPoliticasDirecto(); 
+            if (e.target === document.getElementById('modalExito')) cerrarModalExitoDirecto();
+        }
+
+        // Inicialización de componentes al cargar la ventana
+        renderTarjetasRifas();
+        renderSelectorTabs();
+        renderGanadores();
+        generarBoletosSugeridos();
+    </script>
+</body>
+</html>
