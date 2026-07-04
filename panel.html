@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Rifas Lucha México</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+        :root {
+            --color-fondo: #0b0f19;
+            --color-card: #151d30;
+            --color-borde: #24304f;
+            --color-verde: #006847;
+            --color-verde-bright: #059669;
+            --color-rojo: #d91d2a;
+            --color-amarillo: #f59e0b;
+            --color-texto: #f8fafc;
+            --color-texto-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- LOGIN SCREEN --- */
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--color-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .login-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: var(--color-amarillo);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--color-texto-muted);
+        }
+
+        .form-input {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1.5px solid var(--color-borde);
+            background-color: var(--color-fondo);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+        }
+        .form-input:focus { outline: none; border-color: var(--color-amarillo); }
+
+        .btn-login {
+            width: 100%;
+            background-color: var(--color-amarillo);
+            color: #000000;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: transform 0.1s, background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-login:hover { background-color: #ffc107; }
+        .btn-login:active { transform: scale(0.98); }
+
+        /* --- DASHBOARD SYSTEM --- */
+        .dashboard-container {
+            width: 95%;
+            max-width: 1100px;
+            background-color: var(--color-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            display: none; 
+            flex-direction: column;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .dash-header {
+            background-color: #0a0e1a;
+            border-bottom: 2px solid var(--color-borde);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dash-title {
+            font-weight: 900;
+            font-size: 1.4rem;
+            color: var(--color-amarillo);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+            flex: 1; 
+            justify-content: flex-end; 
+        }
+
+        .nav-links a, .nav-links button {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.9rem; 
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 18px;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .nav-links a:hover, .nav-links button:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-links .active-nav {
+            background-color: var(--color-amarillo);
+            color: #000000;
+        }
+
+        /* --- NAVIGATION TABS --- */
+        .tabs-nav {
+            display: flex;
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 1px solid var(--color-borde);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-texto-muted);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover { color: #ffffff; }
+        .tab-btn.active {
+            color: var(--color-amarillo);
+            border-bottom-color: var(--color-amarillo);
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        .tab-content { padding: 30px; display: none; }
+        .tab-content.active { display: block; }
+
+        /* --- CARD SECTIONS --- */
+        .dash-card {
+            background-color: var(--color-fondo);
+            border: 1px solid var(--color-borde);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .dash-card:last-child { margin-bottom: 0; }
+
+        .dash-card-title {
+            font-size: 1.05rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            color: var(--color-amarillo);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dash-card p {
+            font-size: 0.8rem;
+            color: var(--color-texto-muted);
+            margin-bottom: 15px;
+        }
+
+        .btn-action {
+            background-color: var(--color-verde);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-action:hover { background-color: var(--color-verde-bright); }
+
+        /* --- TABLAS ADAPTATIVAS (NUEVO) --- */
+        .table-responsive-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-borde);
+        }
+
+        .table-reportes {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+            background-color: var(--color-card);
+        }
+
+        .table-reportes th, .table-reportes td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--color-borde);
+        }
+
+        .table-reportes th {
+            background-color: #0b0f19;
+            color: var(--color-amarillo);
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .table-reportes tr:hover {
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        .badge-table-ticket {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--color-amarillo);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        /* --- GRID AJUSTES --- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        @media(min-width: 768px) { .settings-grid { grid-template-columns: 1fr 1fr; } }
+
+        /* --- CONTROL BUSCADOR --- */
+        .search-row { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        .search-results-card {
+            background-color: var(--color-card);
+            border: 1.5px solid var(--color-borde);
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+        }
+
+        .results-head {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--color-borde); padding-bottom: 10px;
+        }
+
+        .badge-folio { background-color: rgba(245, 158, 11, 0.1); color: var(--color-amarillo); padding: 6px 12px; border-radius: 4px; font-weight: 900; }
+        .badge-status { padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; }
+        .badge-status.pagado { background-color: var(--color-verde-bright); color: #ffffff; }
+        .badge-status.apartado { background-color: var(--color-amarillo); color: #000000; }
+
+        .results-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--color-borde); font-size: 0.85rem; }
+        .results-row span { color: var(--color-texto-muted); font-weight: 700; }
+        .results-row strong { color: #ffffff; }
+
+        .control-actions-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; justify-content: center; }
+
+        .btn-ctrl {
+            padding: 10px 14px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; color: #ffffff; text-transform: uppercase;
+        }
+        .btn-ctrl-send { background-color: #25d366; }
+        .btn-ctrl-pay { background-color: var(--color-verde); }
+        .btn-ctrl-revert { background-color: var(--color-amarillo); color: #000; }
+        .btn-ctrl-delete { background-color: var(--color-rojo); }
+
+        .winner-delete-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--color-borde); font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA DE INICIO DE SESIÓN -->
+    <div class="login-container" id="loginBox">
+        <h2 class="login-title">Acceso Administrador</h2>
+        <form onsubmit="procesarLogin(event)">
+            <div class="form-group">
+                <label for="adminUser">Usuario</label>
+                <input type="text" id="adminUser" class="form-input" required placeholder="Ingresar usuario" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="adminPass">Contraseña</label>
+                <input type="password" id="adminPass" class="form-input" required placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-login">Entrar</button>
+        </form>
+    </div>
+
+    <!-- DASHBOARD DE CONTROL PRINCIPAL -->
+    <div class="dashboard-container" id="dashboard">
+        <div class="dash-header">
+            <h1 class="dash-title">Panel Administrativo</h1>
+            <button class="btn-logout" onclick="procesarLogout()">Cerrar Sesión</button>
+        </div>
+
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="cambiarPestaña('tab-reportes', this)">📊 Reportes</button>
+            <button class="tab-btn" onclick="cambiarPestaña('tab-sorteo', this)">🎁 Sorteos</button>
+            <button class="tab-btn" onclick="cambiarPestaña('tab-ganadores', this)">🏆 Ganadores</button>
+            <button class="tab-btn" onclick="cambiarPestaña('tab-boletos', this)">🎫 Buscar Boletos</button>
+        </nav>
+
+        <!-- PESTAÑA 1: REPORTES & LISTADO VISUAL -->
+        <div class="tab-content active" id="tab-reportes">
+            <div class="dash-card">
+                <h3 class="dash-card-title">Grid de Reportes</h3>
+                <p>Descarga el reporte oficial CSV para Microsoft Excel o visualiza y gestiona directamente los boletos registrados del sorteo seleccionado.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
+                    <div class="form-group" style="min-width: 250px; margin-bottom: 0;">
+                        <label>Seleccionar Sorteo</label>
+                        <select id="adminReportMonth" class="form-input" style="font-weight: bold; padding: 10px;" onchange="renderizarTablaBoletos(this.value)">
+                            <!-- Se rellena dinámicamente con las rifas activas -->
+                        </select>
+                    </div>
+                    <button class="btn-action" style="align-self: flex-end;" onclick="exportarBaseDatosACSV()">Descargar (.CSV)</button>
+                </div>
+
+                <!-- LISTA VISUAL INTEGRADA (NUEVO) -->
+                <h4 style="font-size: 0.95rem; text-transform: uppercase; color: var(--color-amarillo); border-top: 1px solid var(--color-borde); padding-top: 20px;">
+                    📋 Boletos Comprados en este Sorteo
+                </h4>
+                <div class="table-responsive-container" id="tableReportContainer">
+                    <!-- Se carga dinámicamente con JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 2: CONFIGURACIÓN DE MULTIRIFAS -->
+        <div class="tab-content" id="tab-sorteo">
+            <div class="dash-card">
+                <h3 class="dash-card-title">Configuración de las 3 Rifas</h3>
+                
+                <div class="form-group" style="margin-bottom: 25px; border-bottom: 2px solid var(--color-borde); padding-bottom: 15px;">
+                    <label style="color: var(--color-amarillo); font-size: 0.9rem;">1. Selecciona la Rifa a Editar</label>
+                    <select id="adminRaffleSelector" class="form-input" onchange="cargarRifaEnFormulario(this.value)" style="font-weight: bold; background-color: #0b0f19;">
+                        <!-- Se llena con las 3 rifas del listado -->
+                    </select>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>¿Mostrar esta Rifa en el Sitio? (Estatus Activo)</label>
+                        <select id="adminInputActive" class="form-input" style="font-weight: bold;">
+                            <option value="true">SÍ (Mostrar en cartelera y boletera)</option>
+                            <option value="false">NO (Ocultar sorteo)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Título del Sorteo</label>
+                        <input type="text" id="adminInputTitle" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de la Rifa</label>
+                        <input type="text" id="adminInputDate" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio de Boleto ($ MXN)</label>
+                        <input type="number" id="adminInputPrice" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Progreso Simulado de Venta (%)</label>
+                        <input type="number" id="adminInputProgress" class="form-input" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen Principal del Sorteo</label>
+                        <input type="text" id="adminInputMainImg" class="form-input">
+                        <input type="file" accept="image/*" style="margin-top: 5px; font-size: 0.8rem;" onchange="procesarArchivoImagen(this, 'adminInputMainImg')">
+                    </div>
+
+                    <!-- Premios -->
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>🥇 1er Lugar (Premio)</label>
+                        <input type="text" id="adminInputPrize1" class="form-input">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>🥈 2do Lugar (Premio)</label>
+                        <input type="text" id="adminInputPrize2" class="form-input">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>🥉 3er Lugar (Premio)</label>
+                        <input type="text" id="adminInputPrize3" class="form-input">
+                    </div>
+                </div>
+                <button class="btn-action" style="width: 100%; margin-top: 25px;" onclick="guardarConfigSorteo()">💾 Guardar Ajustes del Sorteo Seleccionado</button>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 3: GANADORES -->
+        <div class="tab-content" id="tab-ganadores">
+            <div class="dash-card">
+                <h3 class="dash-card-title">Registrar Ganador Anterior (Exactamente 3)</h3>
+                <div class="settings-grid">
+                    <div class="form-group">
+                        <label>Nombre del Ganador</label>
+                        <input type="text" id="adminWinnerName" class="form-input" placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label>Boleto Ganador</label>
+                        <input type="text" id="adminWinnerTicket" class="form-input" placeholder="Ej. #863914" maxlength="6">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Premio Obtenido</label>
+                        <input type="text" id="adminWinnerPrize" class="form-input" placeholder="Ej. iPad Retina Display">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Imagen del Ganador</label>
+                        <input type="text" id="adminWinnerImg" class="form-input" placeholder="URL o sube una imagen local abajo">
+                        <input type="file" accept="image/*" style="margin-top: 5px; font-size: 0.8rem;" onchange="procesarArchivoImagen(this, 'adminWinnerImg')">
+                    </div>
+                </div>
+                <button class="btn-action" style="width: 100%; margin-top: 20px; background-color: var(--color-verde);" onclick="agregarGanadorLocal()">➕ Registrar Ganador</button>
+            </div>
+
+            <div class="dash-card">
+                <h3 class="dash-card-title">Lista de Ganadores Activos (Se muestran los últimos 3 ganadores)</h3>
+                <div id="adminWinnerDeleteList" style="border:1px solid var(--color-borde); border-radius:6px; background-color: var(--color-fondo); overflow: hidden;">
+                    <!-- Se genera por JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 4: BUSCADOR BOLETOS -->
+        <div class="tab-content" id="tab-boletos">
+            <div class="dash-card">
+                <h3 class="dash-card-title">Control de Boletos</h3>
+                <p style="margin-bottom: 15px;">Selecciona la rifa y busca por folio de 6 dígitos.</p>
+                
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Buscar en Sorteo:</label>
+                    <select id="adminSearchRaffleSelect" class="form-input" style="font-weight: bold;">
+                        <!-- Se llena dinámicamente con JS -->
+                    </select>
+                </div>
+
+                <div class="search-row">
+                    <input type="text" id="adminModalSearchInput" class="form-input" style="flex:1;" placeholder="Ingresar folio de boleto (ej: 863914)">
+                    <button class="btn-action" onclick="buscarBoletoAdminModal()">🔍 Buscar</button>
+                </div>
+
+                <!-- Tarjeta con Resultados -->
+                <div class="search-results-card" id="adminModalResults">
+                    <div class="results-head">
+                        <span class="badge-folio" id="adminResFolio">#000000</span>
+                        <span class="badge-status" id="adminResStatus">N/A</span>
+                    </div>
+                    <div class="results-row">
+                        <span>👤 Nombre</span>
+                        <strong id="adminResName">-</strong>
+                    </div>
+                    <div class="results-row">
+                        <span>💬 WhatsApp</span>
+                        <strong id="adminResPhone">-</strong>
+                    </div>
+                    <div class="results-row">
+                        <span>📅 Apartado</span>
+                        <strong id="adminResDate">-</strong>
+                    </div>
+                    <div class="results-row" style="border-bottom: none;">
+                        <span>📄 Comprobante</span>
+                        <strong id="adminResComprobante">-</strong>
+                    </div>
+                    <div class="control-actions-row">
+                        <button class="btn-ctrl btn-ctrl-send" onclick="simularEnvioWhatsApp()">💬 Enviar WhatsApp</button>
+                        <button class="btn-ctrl btn-ctrl-pay" onclick="adminModalAccion('pagar')">📝 Marcar Pagado</button>
+                        <button class="btn-ctrl btn-ctrl-revert" onclick="adminModalAccion('revertir')">🔄 Revertir Pago</button>
+                        <button class="btn-ctrl btn-ctrl-delete" onclick="adminModalAccion('eliminar')">✖ Liberar Boleto</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LÓGICA DE CONTROL DEL ADMIN -->
+    <script>
+        // Sesión básica usando sessionStorage
+        if (sessionStorage.getItem('adminSesion') === 'activa') {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'flex';
+            bodyEstiloFlex(false);
+        }
+
+        function bodyEstiloFlex(centrado) {
+            document.body.style.alignItems = centrado ? 'center' : 'flex-start';
+        }
+
+        function procesarLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+
+            if (user === 'admin' && pass === 'admin123') {
+                sessionStorage.setItem('adminSesion', 'activa');
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex';
+                bodyEstiloFlex(false);
+                inicializarPanel();
+            } else {
+                alert("Credenciales inválidas.");
+            }
+        }
+
+        function procesarLogout() {
+            sessionStorage.removeItem('adminSesion');
+            document.getElementById('loginBox').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            bodyEstiloFlex(true);
+        }
+
+        // --- SISTEMA DE PESTAÑAS ---
+        function cambiarPestaña(tabId, btn) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // --- MULTIRIFAS Y BASE DE DATOS LOCALSTORAGE ---
+        const defaultRifas = [
+            {
+                id: "rifa1",
+                active: true, 
+                title: "🏆 Sorteo Estelar de Campeonato",
+                date: "30 de Mayo",
+                price: 50,
+                prize1: "iPhone Último Modelo",
+                prize2: "iPad Retina Display",
+                prize3: "$5,000 MXN en Efectivo",
+                progress: 65,
+                main_img: "logo.png"
+            },
+            {
+                id: "rifa2",
+                active: true, 
+                title: "🥋 Sorteo Máscara de Oro",
+                date: "15 de Junio",
+                price: 100,
+                prize1: "Viaje a Cancún para 2",
+                prize2: "PlayStation 5",
+                prize3: "$10,000 MXN en Efectivo",
+                progress: 42,
+                main_img: "logo.png"
+            },
+            {
+                id: "rifa3",
+                active: true, 
+                title: "🥊 Sorteo Leyendas del Ring",
+                date: "5 de Julio",
+                price: 35,
+                prize1: "Motoneta Deportiva",
+                prize2: "Smart TV 55\"",
+                prize3: "Audífonos Bluetooth",
+                progress: 10,
+                main_img: "logo.png"
+            }
+        ];
+
+        // Sincronización compartida con index.html
+        let listadoRifas = JSON.parse(localStorage.getItem('sorteoConfigMultirifa')) || defaultRifas;
+        let databaseBoletos = JSON.parse(localStorage.getItem('databaseBoletosMultirifa')) || {};
+
+        function saveDatabase() {
+            localStorage.setItem('databaseBoletosMultirifa', JSON.stringify(databaseBoletos));
+        }
+
+        const defaultGanadores = [
+            { id: 1, name: "CARLOS ORTIZ", ticket: "000112", prize: "iPad Retina Display", img: "logo.png" },
+            { id: 2, name: "ALBERTO GÓMEZ", ticket: "000088", prize: "$5,000 en Efectivo", img: "logo.png" },
+            { id: 3, name: "SANTIAGO RUIZ", ticket: "000452", prize: "iPhone Último Modelo", img: "logo.png" }
+        ];
+
+        let activeGanadores = JSON.parse(localStorage.getItem('ganadoresList')) || defaultGanadores;
+
+        // --- INICIALIZACIÓN ---
+        function inicializarPanel() {
+            cargarSelectoresDeRifa();
+            cargarRifaEnFormulario(listadoRifas[0].id);
+            renderGanadores();
+            renderizarTablaBoletos(listadoRifas[0].id);
+        }
+
+        function cargarSelectoresDeRifa() {
+            const rSelector = document.getElementById('adminRaffleSelector');
+            const rReport = document.getElementById('adminReportMonth');
+            const rSearch = document.getElementById('adminSearchRaffleSelect');
+
+            rSelector.innerHTML = '';
+            rReport.innerHTML = '';
+            rSearch.innerHTML = '';
+
+            listadoRifas.forEach(r => {
+                const optText = `${r.title} [${r.active ? "ACTIVO" : "INACTIVO"}]`;
+                rSelector.innerHTML += `<option value="${r.id}">${optText}</option>`;
+                rReport.innerHTML += `<option value="${r.id}">${r.title}</option>`;
+                rSearch.innerHTML += `<option value="${r.id}">${r.title}</option>`;
+            });
+        }
+
+        // Carga los datos de la rifa elegida en el formulario de edición
+        function cargarRifaEnFormulario(rifaId) {
+            const r = listadoRifas.find(item => item.id === rifaId);
+            if (!r) return;
+
+            document.getElementById('adminInputActive').value = r.active ? "true" : "false";
+            document.getElementById('adminInputTitle').value = r.title;
+            document.getElementById('adminInputDate').value = r.date;
+            document.getElementById('adminInputPrice').value = r.price;
+            document.getElementById('adminInputProgress').value = r.progress || 0;
+            document.getElementById('adminInputMainImg').value = r.main_img;
+            document.getElementById('adminInputPrize1').value = r.prize1;
+            document.getElementById('adminInputPrize2').value = r.prize2;
+            document.getElementById('adminInputPrize3').value = r.prize3;
+        }
+
+        function guardarConfigSorteo() {
+            const selectedId = document.getElementById('adminRaffleSelector').value;
+            const idx = listadoRifas.findIndex(item => item.id === selectedId);
+            if (idx === -1) return;
+
+            const activeVal = document.getElementById('adminInputActive').value === "true";
+            const priceVal = parseInt(document.getElementById('adminInputPrice').value);
+            const progressVal = parseInt(document.getElementById('adminInputProgress').value);
+
+            if (isNaN(priceVal) || priceVal <= 0) {
+                alert("Introduce un precio válido.");
+                return;
+            }
+
+            listadoRifas[idx] = {
+                id: selectedId,
+                active: activeVal,
+                title: document.getElementById('adminInputTitle').value.trim(),
+                date: document.getElementById('adminInputDate').value.trim(),
+                price: priceVal,
+                progress: isNaN(progressVal) ? 0 : progressVal,
+                main_img: document.getElementById('adminInputMainImg').value.trim(),
+                prize1: document.getElementById('adminInputPrize1').value.trim(),
+                prize2: document.getElementById('adminInputPrize2').value.trim(),
+                prize3: document.getElementById('adminInputPrize3').value.trim()
+            };
+
+            localStorage.setItem('sorteoConfigMultirifa', JSON.stringify(listadoRifas));
+            cargarSelectoresDeRifa();
+            document.getElementById('adminRaffleSelector').value = selectedId;
+            renderizarTablaBoletos(selectedId);
+            alert("Ajustes guardados correctamente para este sorteo.");
+        }
+
+        // --- SISTEMA DE GANADORES ANTERIORES (EXACTAMENTE 3) ---
+        function renderGanadores() {
+            const deleteListContainer = document.getElementById('adminWinnerDeleteList');
+            deleteListContainer.innerHTML = '';
+
+            if (activeGanadores.length === 0) {
+                deleteListContainer.innerHTML = '<p style="color: #6b7280; font-size:0.8rem; padding: 15px;">Sin ganadores activos.</p>';
+                return;
+            }
+
+            activeGanadores.forEach(ganador => {
+                const deleteItem = document.createElement('div');
+                deleteItem.classList.add('winner-delete-item');
+                deleteItem.innerHTML = `
+                    <span><strong>${ganador.name}</strong> (Boleto #${ganador.ticket} - ${ganador.prize})</span>
+                    <button onclick="eliminarGanador(${ganador.id})" style="background-color: var(--color-rojo); color:white; border:none; padding: 4px 10px; border-radius:4px; cursor:pointer; font-weight: bold; font-size: 0.75rem;">Eliminar</button>
+                `;
+                deleteListContainer.appendChild(deleteItem);
+            });
+        }
+
+        function agregarGanadorLocal() {
+            const nombre = document.getElementById('adminWinnerName').value.trim();
+            const boleto = document.getElementById('adminWinnerTicket').value.trim().padStart(6, '0');
+            const premio = document.getElementById('adminWinnerPrize').value.trim();
+            const img = document.getElementById('adminWinnerImg').value.trim();
+
+            if (!nombre || !boleto || !premio) {
+                alert("Por favor completa los campos obligatorios.");
+                return;
+            }
+
+            const nuevoGanador = {
+                id: Date.now(),
+                name: nombre.toUpperCase(),
+                ticket: boleto,
+                prize: premio,
+                img: img || 'logo.png'
+            };
+
+            activeGanadores.push(nuevoGanador);
+            localStorage.setItem('ganadoresList', JSON.stringify(activeGanadores));
+            
+            document.getElementById('adminWinnerName').value = '';
+            document.getElementById('adminWinnerTicket').value = '';
+            document.getElementById('adminWinnerPrize').value = '';
+            document.getElementById('adminWinnerImg').value = '';
+
+            renderGanadores();
+            alert("Ganador registrado.");
+        }
+
+        function eliminarGanador(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este ganador?")) {
+                activeGanadores = activeGanadores.filter(g => g.id !== id);
+                localStorage.setItem('ganadoresList', JSON.stringify(activeGanadores));
+                renderGanadores();
+            }
+        }
+
+        // --- EXPORTAR REPORTES CSV POR RIFAS SEPARADAS ---
+        function exportarBaseDatosACSV() {
+            const selectedRifaId = document.getElementById('adminReportMonth').value;
+            const r = listadoRifas.find(item => item.id === selectedRifaId);
+            if (!r) return;
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
+            csvContent += "Boleto,Nombre Comprador,WhatsApp,Estado,Estatus Pago,Fecha Apartado\r\n";
+
+            const rifaDb = databaseBoletos[selectedRifaId] || {};
+            let registrosEncontrados = 0;
+
+            for (const ticket in rifaDb) {
+                const info = rifaDb[ticket];
+                const fila = `"${ticket}","${info.name}","${info.phone}","${info.state}","${info.status.toUpperCase()}","${info.date}"\r\n`;
+                csvContent += fila;
+                registrosEncontrados++;
+            }
+
+            if (registrosEncontrados === 0) {
+                alert(`No hay boletos apartados ni vendidos en el sorteo "${r.title}".`);
+                return;
+            }
+
+            const encodedUri = encodeURI(csvContent);
+            const downloadLink = document.createElement("a");
+            downloadLink.setAttribute("href", encodedUri);
+            downloadLink.setAttribute("download", `Reporte_LuchaMX_${selectedRifaId}.csv`);
+            document.body.appendChild(downloadLink);
+            downloadLink.click(); 
+            document.body.removeChild(downloadLink); 
+        }
+
+        // --- RENDERIZAR TABLA VISUAL DE BOLETOS COMPRADOS (NUEVO) ---
+        function renderizarTablaBoletos(rifaId) {
+            const container = document.getElementById('tableReportContainer');
+            container.innerHTML = '';
+
+            const rifaDb = databaseBoletos[rifaId] || {};
+            const keys = Object.keys(rifaDb).sort();
+
+            if (keys.length === 0) {
+                container.innerHTML = '<p style="color: var(--color-texto-muted); font-size: 0.85rem; padding: 25px; text-align: center;">No hay boletos apartados o comprados para este sorteo en este momento.</p>';
+                return;
+            }
+
+            let html = `
+                <table class="table-reportes">
+                    <thead>
+                        <tr>
+                            <th>Boleto</th>
+                            <th>Nombre</th>
+                            <th>WhatsApp</th>
+                            <th>Estado</th>
+                            <th>Estatus</th>
+                            <th>Comprobante</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            keys.forEach(ticket => {
+                const info = rifaDb[ticket];
+                const btnComp = info.proofImg 
+                    ? `<button class="btn-ctrl btn-ctrl-pay" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 4px;" onclick="verComprobanteAdmin('${info.proofImg}')">👁️ Ver</button>` 
+                    : `<span style="color: var(--color-rojo); font-weight: bold;">N/A</span>`;
+
+                html += `
+                    <tr>
+                        <td><span class="badge-table-ticket">#${ticket}</span></td>
+                        <td><strong>${info.name}</strong></td>
+                        <td>${info.phone}</td>
+                        <td>${info.state}</td>
+                        <td><span class="badge-status ${info.status}" style="font-size:0.7rem; padding: 3px 6px;">${info.status.toUpperCase()}</span></td>
+                        <td>${btnComp}</td>
+                        <td>
+                            <button class="btn-action" style="padding: 4px 8px; font-size: 0.7rem; background-color: var(--color-amarillo); color: black;" onclick="irABuscadorBoleto('${ticket}', '${rifaId}')">
+                                ⚙️ Gestionar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        // Redirige al buscador de boletos y realiza la consulta de manera directa
+        function irABuscadorBoleto(ticket, rifaId) {
+            document.getElementById('adminSearchRaffleSelect').value = rifaId;
+            document.getElementById('adminModalSearchInput').value = ticket;
+            
+            const btnBoletoTab = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes('Buscar Boletos'));
+            cambiarPestaña('tab-boletos', btnBoletoTab);
+            
+            buscarBoletoAdminModal();
+        }
+
+        // --- BUSCADOR DE BOLETOS POR RIFA SELECCIONADA ---
+        let boletoAdminBuscadoNum = null;
+        let adminSearchRaffleId = null;
+
+        function buscarBoletoAdminModal() {
+            adminSearchRaffleId = document.getElementById('adminSearchRaffleSelect').value;
+            const ticketId = document.getElementById('adminModalSearchInput').value.trim().padStart(6, '0');
+            
+            const rifaDb = databaseBoletos[adminSearchRaffleId] || {};
+            const data = rifaDb[ticketId];
+            const resultsCard = document.getElementById('adminModalResults');
+
+            if (data) {
+                boletoAdminBuscadoNum = ticketId;
+                document.getElementById('adminResFolio').textContent = `#${ticketId}`;
+                document.getElementById('adminResName').textContent = data.name;
+                document.getElementById('adminResPhone').textContent = data.phone;
+                document.getElementById('adminResDate').textContent = data.date;
+
+                const statusBadge = document.getElementById('adminResStatus');
+                statusBadge.textContent = data.status.toUpperCase();
+                statusBadge.className = `badge-status ${data.status}`;
+
+                const btnComp = data.proofImg 
+                    ? `<button onclick="verComprobanteAdmin('${data.proofImg}')" style="background-color:var(--color-verde-bright); color:white; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:0.75rem; font-weight:bold; font-family: 'Montserrat', sans-serif;">👁️ Ver Comprobante</button>`
+                    : `❌ Sin archivo`;
+                
+                document.getElementById('adminResComprobante').innerHTML = btnComp;
+                resultsCard.style.display = 'block';
+            } else {
+                resultsCard.style.display = "none";
+                alert('No se encontraron registros de apartado para este número en la rifa seleccionada.');
+            }
+        }
+
+        function verComprobanteAdmin(base64) {
+            const nuevaVentana = window.open();
+            nuevaVentana.document.write(`
+                <body style="background:#000; display:flex; justify-content:center; align-items:center; height:100vh; margin:0;">
+                    <img src="${base64}" style="max-width:90%; max-height:90%; border: 3px solid #f59e0b; border-radius:8px;" title="Comprobante de Pago">
+                </body>
+            `);
+        }
+
+        function adminModalAccion(tipo) {
+            if (!boletoAdminBuscadoNum || !adminSearchRaffleId || !databaseBoletos[adminSearchRaffleId]) return;
+
+            if (tipo === 'pagar') {
+                databaseBoletos[adminSearchRaffleId][boletoAdminBuscadoNum].status = 'pagado';
+                alert(`Boleto #${boletoAdminBuscadoNum} aprobado y marcado como PAGADO.`);
+            } else if (tipo === 'revertir') {
+                databaseBoletos[adminSearchRaffleId][boletoAdminBuscadoNum].status = 'apartado';
+                alert(`Pago revertido del boleto #${boletoAdminBuscadoNum}. Estado actual: APARTADO.`);
+            } else if (tipo === 'eliminar') {
+                if (confirm("¿Seguro que deseas liberar este boleto? Dejará de estar apartado.")) {
+                    delete databaseBoletos[adminSearchRaffleId][boletoAdminBuscadoNum];
+                    alert(`Se ha liberado el boleto #${boletoAdminBuscadoNum}. Vuelve a estar disponible.`);
+                    document.getElementById('adminModalResults').style.display = "none";
+                } else {
+                    return;
+                }
+            }
+
+            saveDatabase();
+            buscarBoletoAdminModal();
+            renderizarTablaBoletos(adminSearchRaffleId);
+        }
+
+        function simularEnvioWhatsApp() {
+            if (!boletoAdminBuscadoNum || !adminSearchRaffleId) return;
+            const data = databaseBoletos[adminSearchRaffleId][boletoAdminBuscadoNum];
+            alert(`Simulando envío de boletos por WhatsApp para:\n\nComprador: ${data.name}\nWhatsApp: ${data.phone}\nBoleto: #${boletoAdminBuscadoNum}`);
+        }
+
+        function procesarArchivoImagen(inputElement, targetInputId) {
+            const archivo = inputElement.files[0];
+            if (archivo) {
+                if (archivo.size > 1024 * 1024) {
+                    alert("Aviso: Esta imagen es algo grande. Se recomienda usar imágenes comprimidas de menos de 1 MB para no saturar el almacenamiento local.");
+                }
+                const lector = new FileReader();
+                lector.onload = function(e) {
+                    document.getElementById(targetInputId).value = e.target.result;
+                };
+                lector.readAsDataURL(archivo);
+            }
+        }
+
+        // Sincronización entre pestañas
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'databaseBoletosMultirifa') {
+                databaseBoletos = JSON.parse(e.newValue) || {};
+                const currentReportRifa = document.getElementById('adminReportMonth').value;
+                if (currentReportRifa) renderizarTablaBoletos(currentReportRifa);
+                if (boletoAdminBuscadoNum) buscarBoletoAdminModal();
+            }
+        });
+
+        // Carga inicial al autenticar
+        if (sessionStorage.getItem('adminSesion') === 'activa') {
+            inicializarPanel();
+        }
+    </script>
+</body>
+</html>
