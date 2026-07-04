@@ -1289,15 +1289,70 @@
         </div>
     </div>
 
-    <!-- MODAL AVISO DE PRIVACIDAD -->
+   <!-- MODAL AVISO DE PRIVACIDAD -->
     <div class="modal-overlay" id="modalPrivacidad" onclick="cerrarModalPrivacidad(event)">
         <div class="privacy-modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="cerrarModalPrivacidadDirecto()">×</button>
             <h3 class="modal-title-privacidad">📄 Aviso de Privacidad</h3>
-            <div class="privacy-body">
-                <p>En cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), <strong>Rifas Lucha México</strong>, declara ser el responsable de recabar, tratar y proteger los datos personales que usted nos proporciona.</p>
-                <p>Los datos que nos proporciona serán utilizados exclusivamente para los fines de reserva, validación de boletos para el sorteo seleccionado, confirmación oficial por mensajería y contacto en caso de resultar ganador de acuerdo con los sorteos oficiales de la Lotería Nacional.</p>
-                <p>Usted puede ejercer sus derechos ARCO enviando una solicitud formal a través de nuestro correo de contacto.</p>
+            <div class="privacy-body" style="text-align: justify; line-height: 1.6; font-size: 0.9rem;">
+                
+                <h4 style="color: #ffffff; margin-top: 15px; margin-bottom: 8px; font-size: 1.05rem; text-transform: uppercase;">
+                    Responsable del tratamiento de sus datos personales
+                </h4>
+                <p style="margin-bottom: 15px;">
+                    En cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), <strong>Rifas Lucha México</strong>, con dirección de correo electrónico <a href="mailto:contacto@rifasluchamexico.com" style="color: var(--color-amarillo); text-decoration: none;">contacto@rifasluchamexico.com</a>, declara ser el responsable de recabar, tratar y proteger los datos personales que usted nos proporciona.
+                </p>
+
+                <h4 style="color: #ffffff; margin-top: 20px; margin-bottom: 8px; font-size: 1.05rem; text-transform: uppercase;">
+                    Datos personales que recabamos
+                </h4>
+                <p style="margin-bottom: 10px;">
+                    Para llevar a cabo las reservas, apartados y validación de boletos para nuestros sorteos, solicitamos los siguientes datos personales:
+                </p>
+                <ul style="padding-left: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; list-style-type: disc;">
+                    <li><strong>Nombre completo</strong> (para el registro oficial del boleto).</li>
+                    <li><strong>Número de teléfono de WhatsApp</strong> (10 dígitos, necesario para el envío del boleto digital y coordinación de entrega).</li>
+                    <li><strong>Estado de la República de residencia</strong> (fines estadísticos y de logística de entrega).</li>
+                    <li><strong>Comprobante de depósito o transferencia bancaria</strong> (fines exclusivos de validación de pago).</li>
+                </ul>
+
+                <h4 style="color: #ffffff; margin-top: 20px; margin-bottom: 8px; font-size: 1.05rem; text-transform: uppercase;">
+                    Finalidades del tratamiento
+                </h4>
+                <p style="margin-bottom: 10px;">
+                    Los datos que nos proporciona serán utilizados exclusivamente para los siguientes fines necesarios para la relación del sorteo:
+                </p>
+                <ul style="padding-left: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; list-style-type: disc;">
+                    <li>Registrar y apartar los folios de boletos seleccionados de manera local.</li>
+                    <li>Validar que las operaciones de pago correspondan a los números reservados.</li>
+                    <li>Enviar los boletos digitales confirmados directamente a su WhatsApp.</li>
+                    <li>Contactar y publicar de manera oficial las iniciales del ganador de cada sorteo de acuerdo con los resultados de la Lotería Nacional de México.</li>
+                </ul>
+
+                <h4 style="color: #ffffff; margin-top: 20px; margin-bottom: 8px; font-size: 1.05rem; text-transform: uppercase;">
+                    Derechos ARCO
+                </h4>
+                <p style="margin-bottom: 15px;">
+                    Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los utilizamos y las condiciones del uso que les damos (<strong>Acceso</strong>). Asimismo, es su derecho solicitar la corrección de su información (<strong>Rectificación</strong>), que la eliminemos de nuestros registros de base de datos cuando considere que no está siendo utilizada adecuadamente (<strong>Cancelación</strong>), así como oponerse al uso de sus datos personales para fines específicos (<strong>Oposición</strong>). Para el ejercicio de cualquiera de estos derechos ARCO, usted deberá enviar una solicitud por escrito al correo <a href="mailto:contacto@rifasluchamexico.com" style="color: var(--color-amarillo); text-decoration: none;">contacto@rifasluchamexico.com</a>.
+                </p>
+
+                <h4 style="color: #ffffff; margin-top: 20px; margin-bottom: 8px; font-size: 1.05rem; text-transform: uppercase;">
+                    No transferencia de datos
+                </h4>
+                <p style="margin-bottom: 15px;">
+                    Le garantizamos que sus datos personales no serán vendidos, transferidos, alquilados ni compartidos con ninguna tercera persona, empresa o entidad ajena a este sitio web, salvo por requerimiento obligatorio de una autoridad judicial o fiscal competente del Estado Mexicano.
+                </p>
+
+                <h4 style="color: #ffffff; margin-top: 20px; margin-bottom: 8px; font-size: 1.05rem; text-transform: uppercase;">
+                    Modificaciones al aviso de privacidad
+                </h4>
+                <p style="margin-bottom: 15px;">
+                    El presente aviso de privacidad puede sufrir modificaciones, cambios o actualizaciones derivadas de nuevos requerimientos legales o de nuestras propias prácticas de seguridad informática. Cualquier modificación estará disponible de manera inmediata a través de este portal web.
+                </p>
+
+                <p style="text-align: right; margin-top: 30px; font-style: italic; font-size: 0.8rem; color: var(--color-texto-mutado);">
+                    Última actualización: Mayo de 2026.
+                </p>
             </div>
         </div>
     </div>
@@ -1308,9 +1363,38 @@
             <button class="modal-close" onclick="cerrarModalPoliticasDirecto()">×</button>
             <h3 class="modal-title-privacidad">📜 Políticas de Servicio</h3>
             <div class="privacy-body">
-                <p><strong>A)</strong> Cada rifa es independiente del resto y cuenta con su respectiva bolsa de premios indicada al inicio de su publicación oficial.</p>
-                <p><strong>B)</strong> Para llevar a cabo el sorteo de manera oportuna, debe estar cubierto un mínimo del 85% de los boletos emitidos. En caso contrario, se informará una nueva fecha de realización.</p>
-                <p><strong>C)</strong> El ganador de cada premio deberá mostrar identificación oficial coincidente con los datos de registro ingresados al apartar el boleto.</p>
+                <p style="text-align: center; color: #ffffff; font-weight: bold; font-size: 1rem; margin-bottom: 25px;">
+                    Organizamos rifas <span style="color: var(--color-verde-brillante);">A NIVEL NACIONAL</span>, en las que puedes participar desde cualquier parte de la república mexicana adquiriendo tu boleto digital.
+                </p>
+
+                <h4 style="color: var(--color-rojo); text-align: center; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; font-family: 'Impact', sans-serif; letter-spacing: 0.5px;">
+                    Aviso Importante de Nuestras Rifas
+                </h4>
+
+                <div style="display: flex; flex-direction: column; gap: 20px; text-align: justify; line-height: 1.6;">
+                    <p>
+                        <strong style="color: var(--color-amarillo); font-size: 1.1rem;">A)</strong> En nuestras rifas puede haber uno o más ganadores y será aclarado desde el inicio de la publicación de cada rifa, es decir, que cada rifa es independiente del o las anteriores, activas o concluidas.<br><br>
+                        Refiriéndonos a que una o varias rifas hechas por esta empresa RIFAS LUCHA MÉXICO, pueden tener un 1er lugar, un 2do lugar y un 3er lugar. Otra rifa puede tener 1er lugar y 2do lugar, y/o otra rifa solo tendrá 1er lugar.<br>
+                        El número de ganadores será publicado, comunicado y/o confirmado en el inicio de cada una de las rifas.
+                    </p>
+
+                    <p>
+                        <strong style="color: var(--color-amarillo); font-size: 1.1rem;">B)</strong> Para llevar a cabo cada una de las rifas y poder proceder a determinar él o los ganadores, <strong style="color: #ffffff;">"deberá estar vendido mínimo el 85% de los boletos digitales de cada rifa"</strong>. En caso de que no sea posible realizarse la rifa, esta se reagendará en un video en vivo.
+                    </p>
+
+                    <p>
+                        <strong style="color: var(--color-amarillo); font-size: 1.1rem;">C)</strong> El ganador y/o ganadores serán él y/o los participantes que tengan el boleto digital con el número ganador correspondiente a la rifa. Deberán coincidir sus datos personales con su identificación oficial personal y número de celular registrado al momento de la compra del boleto.<br><br>
+                        Además, el boleto debe haber sido pagado propiamente en tiempo y forma antes de darse a conocer los números ganadores en la transmisión en vivo de la Lotería Nacional de México; de lo contrario, no procederá el reclamo del premio ni el ganador y/o ganadores y se reprogramará una nueva fecha para la rifa.
+                    </p>
+
+                    <p>
+                        <strong style="color: var(--color-amarillo); font-size: 1.1rem;">D)</strong> Él o los números ganadores se seleccionarán de acuerdo a los números ganadores de los sorteos de la Lotería Nacional de México. <strong style="color: #ffffff; text-decoration: underline;">NO HACEMOS LAS RIFAS CON TÓMBOLAS CASERAS.</strong>
+                    </p>
+
+                    <p style="background-color: rgba(217, 29, 42, 0.1); border-left: 4px solid var(--color-rojo); padding: 18px; border-radius: 8px; line-height: 1.5; color: #ff4d4d;">
+                        <strong style="color: var(--color-amarillo); font-size: 1.1rem;">E)</strong> <strong>SI EL COMPROBANTE DEL BOLETO NO ES CLARO O SE DETECTA QUE SE HA UTILIZADO UN MISMO COMPROBANTE PARA VARIOS REGISTROS, SERÁ ANULADO ANTICIPADAMENTE A LA FECHA DE LA RIFA.</strong>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
